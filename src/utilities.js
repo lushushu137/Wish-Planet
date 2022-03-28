@@ -71,6 +71,9 @@ const eyePoints = [
 export const drawFace = (predictions, canvas) => {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.translate(canvas.width,0)
+  ctx.scale(-1,1)
+  
   ctx.font = "14px serif";
   ctx.fillStyle = "white";
   if (predictions.length > 0) {
@@ -87,7 +90,7 @@ export const drawFace = (predictions, canvas) => {
       // Draw facial keypoints.
       for (let j = 0; j < keypoints.length; j += 1) {
         const [x, y] = keypoints[j];
-        ctx.fillText("·", x, y);
+        ctx.fillText("·", x*1.25, y*1.25);
       }
     }
 
@@ -105,6 +108,7 @@ export const drawFace = (predictions, canvas) => {
       }
     });
   }
+  ctx.resetTransform()
 };
 function getEAR(upper, lower) {
   return (

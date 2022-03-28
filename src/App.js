@@ -1,6 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Background from "./components/Background";
+import ShootingStar from "./components/ShootingStar";
+
 import Video from "./components/Video";
 
 function App() {
@@ -8,6 +10,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Video />
+        <ShootingStar />
         <Background />
       </header>
     </div>

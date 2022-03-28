@@ -177,7 +177,9 @@ function Background() {
       ctx.stroke();
     }
   }
-  const draw = (p5) => {};
+
+  const draw = (p5) => {
+  };
 
   return <Sketch setup={setup} draw={draw} />;
 }

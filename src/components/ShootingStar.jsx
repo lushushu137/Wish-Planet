@@ -48,7 +48,7 @@ function star(x, y, radius1, radius2, npoints, p5) {
     p5.endShape(p5.CLOSE);
   }
   
-  return <div style={{position:"absolute"}}>
+  return <div className="ShootingStar" style={{position:"absolute"}}>
   <Sketch setup={setup} draw={draw} />
   </div>;
 

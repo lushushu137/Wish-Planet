@@ -2,7 +2,13 @@ import { isCompositeComponent } from "react-dom/test-utils";
 
 const EAR_THRESHOLD = 0.27;
 const WRIST_THRESHOL = 0.3;
+export const HAND_STATUS = {
+  NO_HAND: Symbol(),
+  NOT_PRAYING: Symbol(),
+  PRAYING: Symbol(),
+};
 
+// visualize posenet
 export const drawPose = (predictions, canvas) => {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -25,7 +31,7 @@ export const drawPose = (predictions, canvas) => {
   }
 };
 
-export const isHandPraying = (predictions, canvas) => {
+export const checkHandStatus = (predictions, canvas) => {
   const ctx = canvas.getContext("2d");
   if (predictions.length > 0) {
     let leftEar = predictions[0].pose.leftEar;
@@ -40,14 +46,17 @@ export const isHandPraying = (predictions, canvas) => {
       rightWrist.confidence < WRIST_THRESHOL
     ) {
       ctx.fillText("not detecting hands", 250, 500);
+      return HAND_STATUS.NO_HAND;
     } else if (
       leftEar.x - 50 < leftWrist.x &&
       leftWrist.x < rightWrist.x &&
       rightWrist.x < rightEar.x + 50
     ) {
       ctx.fillText("praying!", 250, 500);
+      return HAND_STATUS.PRAYING;
     } else {
       ctx.fillText("not praying", 250, 500);
+      return HAND_STATUS.NOT_PRAYING;
     }
   }
 };
@@ -68,12 +77,14 @@ const eyePoints = [
   "rightEyeUpper1",
   "rightEyeUpper2",
 ];
+
+// visualize facemesh
 export const drawFace = (predictions, canvas) => {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.translate(canvas.width,0)
-  ctx.scale(-1,1)
-  
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+
   ctx.font = "14px serif";
   ctx.fillStyle = "white";
   if (predictions.length > 0) {
@@ -90,7 +101,7 @@ export const drawFace = (predictions, canvas) => {
       // Draw facial keypoints.
       for (let j = 0; j < keypoints.length; j += 1) {
         const [x, y] = keypoints[j];
-        ctx.fillText("·", x*1.25, y*1.25);
+        ctx.fillText("·", x * 1.25, y * 1.25);
       }
     }
 
@@ -108,7 +119,7 @@ export const drawFace = (predictions, canvas) => {
       }
     });
   }
-  ctx.resetTransform()
+  ctx.resetTransform();
 };
 function getEAR(upper, lower) {
   return (

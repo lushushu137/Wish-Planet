@@ -7,13 +7,13 @@ function Background() {
     this.y = y;
   }
   var palette = [
-    '#122C34',
-    '#1A3A52',
+    '#242C41',
+    '#30384D',
+    '#3D415A',
+    '#595D76',
+    '#81889B',
+    '#9FA8BB',
     '#224870',
-    '#36597D',
-    '#68829E',
-    '#A9B8C8',
-    '#DDDDDD',
   ];
   let ctx;
   let height;
@@ -181,7 +181,10 @@ function Background() {
   const draw = (p5) => {
   };
 
-  return <Sketch setup={setup} draw={draw} />;
+  return  <div className="Background">
+    <Sketch setup={setup} draw={draw} />;
+
+  </div>
 }
 
 export default Background;

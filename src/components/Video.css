@@ -1,0 +1,35 @@
+.Video {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.video,
+.canvas {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%) rotateY(180deg);
+  z-index: 3;
+}
+
+.canvas {
+  transform: translate(-50%, -50%);
+}
+
+.button {
+  /* position: absolute;
+  width: 100px;
+  height: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; */
+}
+.progressBar {
+  position: absolute;
+  width: 200px;
+  height: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}

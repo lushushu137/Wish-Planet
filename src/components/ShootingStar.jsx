@@ -2,19 +2,42 @@ import * as React from 'react';
 import Sketch from 'react-p5';
 let height;
 let width;
-function ShootingStar() {
+let shooting = false;  
+let shootingStarY = 0;
+let shootingStarX = 0;
+
+
+function ShootingStar(props) {
+
   const setup = (p5, canvasParentRef) => {
     [height, width] = [p5.windowHeight, p5.windowWidth];
     p5.createCanvas(width, height).parent(canvasParentRef);
+    
+    shootingStarX = 0.8*width;
+
+    setTimeout(()=>{
+      shooting = true
+      props.setShooting(true);
+      setTimeout(()=>{
+        shooting = false
+        props.setShooting(false);
+      }, 10000)
+    }, 5000)
   }
   const draw = (p5) => {
     // p5.background(0,0,0, 0);
     p5.clear();
-    p5.push();
-    p5.translate(width * 0.8, height * 0.2);
-    p5.rotate(p5.frameCount / -200.0);
-    star(0,0, 5, 25, 6,p5);
-    p5.pop();
+    if (shooting){
+      p5.push();
+      shootingStarX = shootingStarX - width/(5*10*p5.getFrameRate())
+      shootingStarY = shootingStarY + height/(2*10*p5.getFrameRate());
+
+      p5.translate(shootingStarX, shootingStarY);
+      p5.rotate(p5.frameCount / -200.0);
+      star(0,0, 5, 25, 6,p5);
+      p5.pop();
+    }
+   
     
     p5.push();
     p5.translate(width * 0.5, height * 0.1);

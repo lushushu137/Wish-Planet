@@ -8,6 +8,13 @@ export const HAND_STATUS = {
   PRAYING: Symbol(),
 };
 
+export const catchStatus = {
+  WAITING: Symbol(),
+  CATCHING: Symbol(),
+  SUCCESS: Symbol(),
+  FAIL: Symbol(),
+};
+
 // visualize posenet
 export const drawPose = (predictions, canvas) => {
   const ctx = canvas.getContext("2d");
@@ -19,14 +26,14 @@ export const drawPose = (predictions, canvas) => {
     let rightEar = predictions[0].pose.rightEar;
     let leftWrist = predictions[0].pose.leftWrist;
     let rightWrist = predictions[0].pose.rightWrist;
-    ctx.fillText("leftEar", leftEar.x, leftEar.y);
-    ctx.fillText("rightEar", rightEar.x, rightEar.y);
+    // ctx.fillText("leftEar", leftEar.x, leftEar.y);
+    // ctx.fillText("rightEar", rightEar.x, rightEar.y);
     if (
       leftWrist.confidence > WRIST_THRESHOL &&
       rightWrist.confidence > WRIST_THRESHOL
     ) {
-      ctx.fillText("leftWrist", leftWrist.x, leftWrist.y);
-      ctx.fillText("rightWrist", rightWrist.x, rightWrist.y);
+      // ctx.fillText("leftWrist", leftWrist.x, leftWrist.y);
+      // ctx.fillText("rightWrist", rightWrist.x, rightWrist.y);
     }
   }
 };

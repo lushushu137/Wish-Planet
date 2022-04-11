@@ -3,7 +3,7 @@ import * as ml5 from 'ml5';
 import LinearProgress from '@mui/material/LinearProgress';
 import Button from '@mui/material/Button';
 
-import { drawHand, drawPose, checkHandStatus,HAND_STATUS,drawFace, isEyePraying} from "../utilities";
+import { drawHand, drawPose, checkHandStatus,HAND_STATUS,drawFace, isEyePraying, catchStatus} from "../utilities";
 
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import * as tf from '@tensorflow/tfjs-core';
@@ -14,22 +14,16 @@ import "./Video.css"
 const width = 400;
 const height = 300;
 
-const catchStatus = {
-    WAITING: Symbol(),
-    CATCHING: Symbol(),
-    SUCCESS: Symbol(),
-    FAIL: Symbol(),
-}
-
 function Video (props){
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [text, setText] = useState("")
     const [showProgressBar, setShowProgressBar] = useState(false)
     const [progress, setProgress] = useState(0)
-    const [direction, setDirection] = useState(0)
-    const [shooting, setShooting] = useState(false)
-    const [catched, setCatched] = useState(catchStatus.WAITING)
+
+    const [direction, setDirection] = useState(0) // increase or decrease
+    const [shooting, setShooting] = useState(false) // shooting or not shooting
+    const [caught, setCaught] = useState(catchStatus.WAITING) // catchstatus: waiting, catching, success, fail
 
     // set video
     useEffect(() => {
@@ -47,15 +41,16 @@ function Video (props){
         let timer;
         if (direction != 0 && shooting) {
             timer = setInterval(() => {
-                curr = curr + direction*2;
+                curr = curr + direction * 2;
                 curr = curr < 0 ? 0 : curr
                 if (curr > 100) {
-                    setCatched(catchStatus.SUCCESS)
+                    setCaught(catchStatus.SUCCESS);
+                    props.setCatchStatus(catchStatus.SUCCESS);
                     setShowProgressBar(false)
-                    setText("You catched a star :)")
+                    setText("You caught a star :)")
                 } 
                 setProgress(curr)
-            }, 50)
+            }, 100)
         }
       
         return ()=>{
@@ -68,11 +63,11 @@ function Video (props){
     useEffect(() => {
         if (!props.shooting) {
             setShooting(false);
-            setCatched(catchStatus.CATCHING);
-            if (catched == catchStatus.FAIL || catched == catchStatus.CATCHING){
+            setCaught(catchStatus.CATCHING);
+            if (caught == catchStatus.FAIL || caught == catchStatus.CATCHING){
                 setShowProgressBar(false)
                 setText("You missed a star :(")
-            }  else if (catched == catchStatus.WAITING){
+            }  else if (caught == catchStatus.WAITING){
                 setText("waiting for a star...")
                 setShowProgressBar(false)
             }
@@ -104,8 +99,10 @@ function Video (props){
             drawPose(results, canvasRef.current)
             let handState = checkHandStatus(results, canvasRef.current);
             if (handState == HAND_STATUS.PRAYING) {
+                props.setDirection(1);
                 setDirection(1)
             } else {
+                props.setDirection(-1);
                 setDirection(-1)
             }
         });

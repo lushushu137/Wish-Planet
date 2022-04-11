@@ -1,19 +1,29 @@
-import * as React from 'react';
 import Sketch from 'react-p5';
+import React , { useEffect, useRef, useState }from "react";
+import { catchStatus } from "../utilities";
+
 let height;
 let width;
 let shooting = false;  
 let shootingStarY = 0;
 let shootingStarX = 0;
-
+let xMovingSpeedFast = 2;
+let xMovingSpeedSlow = 6;
+let yMoveingSpeedFast = 1;
+let yMoveingSpeedSlow = 3;
 
 function ShootingStar(props) {
-
+  const [direction, setDirection] = useState(0);
+  const [hasCaught, setHasCaught] = useState(catchStatus.WAITING);
+  useEffect(() =>{
+    setDirection(props.direction)
+    setHasCaught(props.currentState)
+  }, [props.direction, props.currentState]);
   const setup = (p5, canvasParentRef) => {
     [height, width] = [p5.windowHeight, p5.windowWidth];
     p5.createCanvas(width, height).parent(canvasParentRef);
     
-    shootingStarX = 0.8*width;
+    shootingStarX = 0.8 * width;
 
     setTimeout(()=>{
       shooting = true
@@ -25,17 +35,27 @@ function ShootingStar(props) {
     }, 5000)
   }
   const draw = (p5) => {
-    // p5.background(0,0,0, 0);
     p5.clear();
     if (shooting){
-      p5.push();
-      shootingStarX = shootingStarX - width/(5*10*p5.getFrameRate())
-      shootingStarY = shootingStarY + height/(2*10*p5.getFrameRate());
-
+      if (hasCaught !== catchStatus.SUCCESS){
+        p5.push();
+      // position
+      if (direction == 1){
+        shootingStarX = shootingStarX - width/(xMovingSpeedSlow*10*p5.getFrameRate())
+        shootingStarY = shootingStarY + height/(yMoveingSpeedSlow*10*p5.getFrameRate());
+      }
+      if (direction == -1){
+        shootingStarX = shootingStarX - width/(xMovingSpeedFast*10*p5.getFrameRate())
+        shootingStarY = shootingStarY + height/(yMoveingSpeedFast*10*p5.getFrameRate());
+      }
+    
+      // rotate
       p5.translate(shootingStarX, shootingStarY);
       p5.rotate(p5.frameCount / -200.0);
       star(0,0, 5, 25, 6,p5);
       p5.pop();
+      }
+      
     }
    
     

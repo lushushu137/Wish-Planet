@@ -180,9 +180,8 @@ function Background() {
 
   const draw = (p5) => {
   };
-
   return  <div className="Background">
-    <Sketch setup={setup} draw={draw} />;
+    <Sketch setup={setup} draw={draw} />
 
   </div>
 }

@@ -1,10 +1,9 @@
 import Sketch from 'react-p5';
-import React , { useEffect, useRef, useState }from "react";
-import { catchStatus } from "../utilities";
+import React , { useEffect, useState }from "react";
+import { CATCH_STATUS } from "../utilities";
 
 let height;
 let width;
-let shooting = false;  
 let shootingStarY = 0;
 let shootingStarX = 0;
 let xMovingSpeedFast = 2;
@@ -14,32 +13,25 @@ let yMoveingSpeedSlow = 3;
 
 function ShootingStar(props) {
   const [direction, setDirection] = useState(0);
-  const [hasCaught, setHasCaught] = useState(catchStatus.WAITING);
+  const [currentState, setCurrentState] = useState(CATCH_STATUS.WAITING);
   useEffect(() =>{
     setDirection(props.direction)
-    setHasCaught(props.currentState)
+    setCurrentState(props.currentState)
   }, [props.direction, props.currentState]);
+
+
   const setup = (p5, canvasParentRef) => {
     [height, width] = [p5.windowHeight, p5.windowWidth];
     p5.createCanvas(width, height).parent(canvasParentRef);
     
     shootingStarX = 0.8 * width;
-
-    setTimeout(()=>{
-      shooting = true
-      props.setShooting(true);
-      setTimeout(()=>{
-        shooting = false
-        props.setShooting(false);
-      }, 10000)
-    }, 5000)
+    shootingStarY = 0;
   }
   const draw = (p5) => {
     p5.clear();
-    if (shooting){
-      if (hasCaught !== catchStatus.SUCCESS){
+    if (currentState == CATCH_STATUS.CATCHING){
         p5.push();
-      // position
+      // move slow if 
       if (direction == 1){
         shootingStarX = shootingStarX - width/(xMovingSpeedSlow*10*p5.getFrameRate())
         shootingStarY = shootingStarY + height/(yMoveingSpeedSlow*10*p5.getFrameRate());
@@ -54,8 +46,12 @@ function ShootingStar(props) {
       p5.rotate(p5.frameCount / -200.0);
       star(0,0, 5, 25, 6,p5);
       p5.pop();
-      }
       
+    }
+
+    if (currentState == CATCH_STATUS.WAITING){
+      shootingStarX = 0.8 * width;
+      shootingStarY = 0;
     }
    
     
@@ -91,10 +87,10 @@ function star(x, y, radius1, radius2, npoints, p5) {
     p5.endShape(p5.CLOSE);
   }
   
-  return <div className="ShootingStar" style={{position:"absolute"}}>
+  return (<div className="ShootingStar" style={{position:"absolute"}}>
   <Sketch setup={setup} draw={draw} />
-  </div>;
+  </div>);
+  }
 
-}
 
 export default ShootingStar;

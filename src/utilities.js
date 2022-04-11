@@ -2,17 +2,33 @@ import { isCompositeComponent } from "react-dom/test-utils";
 
 const EAR_THRESHOLD = 0.27;
 const WRIST_THRESHOL = 0.3;
+
+export const appState = {
+  WELCOME: Symbol(),
+  TUTORIAL: Symbol(),
+  GAMING: Symbol(),
+  GENERATING: Symbol(),
+  CHECKPlANET: Symbol(),
+};
+
 export const HAND_STATUS = {
   NO_HAND: Symbol(),
   NOT_PRAYING: Symbol(),
   PRAYING: Symbol(),
 };
 
-export const catchStatus = {
+export const CATCH_STATUS = {
   WAITING: Symbol(),
   CATCHING: Symbol(),
   SUCCESS: Symbol(),
   FAIL: Symbol(),
+  END: Symbol(),
+};
+
+export const generatingState = {
+  BEFORE: Symbol(),
+  MIDDLE: Symbol(),
+  END: Symbol(),
 };
 
 // visualize posenet

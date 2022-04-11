@@ -1,0 +1,24 @@
+.PlanetCard{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.container {
+    font-size: 20px;
+    padding: 30px;
+    /* width: 500px;
+    height: 300px; */
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: solid 1px white;
+    color: white;
+}

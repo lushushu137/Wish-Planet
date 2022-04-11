@@ -1,30 +1,28 @@
+import Sketch from 'react-p5';
 import React , { useEffect, useRef, useState }from "react";
 import * as ml5 from 'ml5';
 import LinearProgress from '@mui/material/LinearProgress';
 import Button from '@mui/material/Button';
+import ShootingStar from "./ShootingStar";
 
-import { drawHand, drawPose, checkHandStatus,HAND_STATUS,drawFace, isEyePraying, catchStatus} from "../utilities";
+import { drawHand, drawPose, checkHandStatus,HAND_STATUS,drawFace, isEyePraying, CATCH_STATUS, appState} from "../utilities";
 
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import * as tf from '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-webgl';
-import "./Video.css"
+import "./Game.css"
 
 
 const width = 400;
 const height = 300;
 
-function Video (props){
+function Game (props){
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [text, setText] = useState("")
-    const [showProgressBar, setShowProgressBar] = useState(false)
     const [progress, setProgress] = useState(0)
-
     const [direction, setDirection] = useState(0) // increase or decrease
-    const [shooting, setShooting] = useState(false) // shooting or not shooting
-    const [caught, setCaught] = useState(catchStatus.WAITING) // catchstatus: waiting, catching, success, fail
-
+    const [catchStatus, setCatchStatus] = useState(CATCH_STATUS.WAITING) 
     // set video
     useEffect(() => {
         navigator.mediaDevices
@@ -35,19 +33,57 @@ function Video (props){
             videoRef.current.onloadeddata = start;
         });
     }, [])
+
+    // state machine
+    useEffect(() => {
+        switch (catchStatus){
+            case CATCH_STATUS.WAITING:
+                setText("waiting for a star...")
+                setProgress(0);
+                setDirection(0);
+                setTimeout(() => {
+                    setCatchStatus(CATCH_STATUS.CATCHING)
+                }, 5000)
+                return;
+            case CATCH_STATUS.CATCHING:
+                setText("Quick! Make a wish!")
+                setTimeout(()=>{
+                    setCatchStatus(CATCH_STATUS.FAIL)
+                }, 10000)
+                return;
+            case CATCH_STATUS.SUCCESS:
+                setText("You caught a star :)")
+                setTimeout(() => props.toNextState(appState.GENERATING), 2000)
+                return;
+            
+            case CATCH_STATUS.FAIL:
+                setText("You missed a star :(")
+                setTimeout(() => {
+                    setCatchStatus(CATCH_STATUS.WAITING)
+                }, 2000)
+                return;
+            default:
+                break;
+        }
+    },[catchStatus])
+
+    // after 5s shoot a star
+    useEffect(()=>{
+        setTimeout(()=>{
+            setCatchStatus(CATCH_STATUS.CATCHING)
+        }, 5000)
+    },[])
+
     // progress
     useEffect(()=>{
         let curr = progress;
         let timer;
-        if (direction != 0 && shooting) {
+        if (catchStatus == CATCH_STATUS.CATCHING) {
             timer = setInterval(() => {
                 curr = curr + direction * 2;
                 curr = curr < 0 ? 0 : curr
                 if (curr > 100) {
-                    setCaught(catchStatus.SUCCESS);
-                    props.setCatchStatus(catchStatus.SUCCESS);
-                    setShowProgressBar(false)
-                    setText("You caught a star :)")
+                    setCatchStatus(CATCH_STATUS.SUCCESS);
                 } 
                 setProgress(curr)
             }, 100)
@@ -57,34 +93,13 @@ function Video (props){
             console.log('clear timer')
             timer&&clearInterval(timer)
         }
-    },[direction,shooting])
+    },[catchStatus, direction])
 
-    // mock shooting star
-    useEffect(() => {
-        if (!props.shooting) {
-            setShooting(false);
-            setCaught(catchStatus.CATCHING);
-            if (caught == catchStatus.FAIL || caught == catchStatus.CATCHING){
-                setShowProgressBar(false)
-                setText("You missed a star :(")
-            }  else if (caught == catchStatus.WAITING){
-                setText("waiting for a star...")
-                setShowProgressBar(false)
-            }
-        } else{
-            setShowProgressBar(true)
-            setText("Quick! Make a wish!")
-            setShooting(true)
-        }
-       
-    },[props.shooting])
 
     
     const start = ()=>{
         // detect hands closing;
         startPoseNet()
-        //  detect eyes closing
-        // startFeceMesh()
     }
       
     const startPoseNet = async() =>{
@@ -99,36 +114,18 @@ function Video (props){
             drawPose(results, canvasRef.current)
             let handState = checkHandStatus(results, canvasRef.current);
             if (handState == HAND_STATUS.PRAYING) {
-                props.setDirection(1);
                 setDirection(1)
             } else {
-                props.setDirection(-1);
                 setDirection(-1)
             }
         });
     }
-    function startFeceMesh(){
-        const facemesh = ml5.facemesh(videoRef.current, 
-            {
-            // flipHorizontal:true, 
-            // predictIrises: true,
-            maxFaces:1
-        },
-        faceModelLoaded);
-        function faceModelLoaded(){
-            console.log('facemesh Loaded!');
-        }
-        facemesh.on('face', results => {
-         drawFace(results, canvasRef.current)
-         isEyePraying(results, canvasRef.current)
-        })
-    }
     return (
-        <div className="Video">
+        <div className="Game">
             <h2>{text}</h2>
             <LinearProgress 
                 sx={{
-                    opacity: showProgressBar ? 1 : 0,
+                    opacity: catchStatus == CATCH_STATUS.CATCHING ? 1 : 0,
                     height: 10,
                     borderRadius: 5,
                     width: 300,
@@ -149,9 +146,15 @@ function Video (props){
                     height={height}
                 ></canvas>
              </div>
-           
+             <ShootingStar
+              direction={direction}
+              currentState={catchStatus}
+            />
         </div>
       );   
 }
 
-export default Video;
+export default Game;
+
+
+

@@ -4,10 +4,11 @@ import { CATCH_STATUS } from "../utilities";
 import {starData} from "../starData";
 import PlanetCard from "./PlanetCard"
 import "./ShootingStar.css"
-import shootingSound from "../asset/music/shooting.wav"
-import caughtSound from "../asset/music/caught.wav"
+import jingleBell from "../asset/music/jingleBell.mp3"
+import drone from "../asset/music/drone.wav"
+import caught from "../asset/music/caught.wav"
+import 'p5/lib/addons/p5.sound';
 
-import useSound from 'use-sound';
 
 let height;
 let width;
@@ -20,26 +21,47 @@ let yMoveingSpeedSlow = 3;
 
 let hoverState = undefined
 
-function ShootingStar(props) {
-  const [direction, setDirection] = useState(0);
-  const [currentState, setCurrentState] = useState(CATCH_STATUS.WAITING);
-  const [showCard, setShowCard] = useState(undefined);
-  const [playShooting] = useSound(shootingSound)
-  const [playSuccess] = useSound(caughtSound)
-  
-  useEffect(() =>{
-    setDirection(props.direction)
-    setCurrentState(props.currentState)
-  }, [props.direction, props.currentState]);
+let shootSound;
+let jingleSound;
+let caughtSound;
 
+function ShootingStar(props) {
+  const [showCard, setShowCard] = useState(undefined);
+  
+  // sound
   useEffect(()=>{
-    if (props.currentState == CATCH_STATUS.CATCHING){
-      playShooting();
+    let timeout;
+    switch (props.currentState){
+      case CATCH_STATUS.CATCHING:
+        console.log('catching')
+        // prevent too many same clips from playing at the same time
+        if (!shootSound.isPlaying()){
+          shootSound.play()
+        }
+        // jingleSound should stop when user is not praying
+        if (props.direction == -1){
+          jingleSound.stop()
+        } else if (props.direction == 1) {
+          if (!jingleSound.isLooping()){
+            jingleSound.play()
+          }
+        }
+        return;
+      case CATCH_STATUS.SUCCESS:
+        caughtSound.play()
+        jingleSound.stop()
+        shootSound.stop()
+        return;
+      case CATCH_STATUS.FAIL:
+        jingleSound.stop()
+        shootSound.stop()
+        return;
+      default:
+        break;
     }
-    if (props.currentState == CATCH_STATUS.SUCCESS){
-      playSuccess();
-    }
-  },[props.currentState])
+    return timeout
+  },[props.currentState, props.direction])
+
 
   const setup = (p5, canvasParentRef) => {
     [height, width] = [p5.windowHeight, p5.windowWidth];
@@ -47,6 +69,14 @@ function ShootingStar(props) {
     
     shootingStarX = 0.8 * width;
     shootingStarY = 0;
+
+    // sound setup
+    shootSound = p5.loadSound(drone);
+    jingleSound = p5.loadSound(jingleBell);
+    caughtSound = p5.loadSound(caught)
+    jingleSound.setLoop(true)
+    shootSound.setLoop(false)
+
   }
   function star(x, y, radius1, radius2, npoints, p5) {
     let angle = p5.TWO_PI / npoints;
@@ -65,14 +95,14 @@ function ShootingStar(props) {
   }
   const draw = (p5) => {
     p5.clear();
-    if (currentState == CATCH_STATUS.CATCHING){
+    if (props.currentState == CATCH_STATUS.CATCHING){
         p5.push();
       // move slow if 
-      if (direction == 1){
+      if (props.direction == 1){
         shootingStarX = shootingStarX - width/(xMovingSpeedSlow*10*p5.getFrameRate())
         shootingStarY = shootingStarY + height/(yMoveingSpeedSlow*10*p5.getFrameRate());
       }
-      if (direction == -1){
+      if (props.direction == -1){
         shootingStarX = shootingStarX - width/(xMovingSpeedFast*10*p5.getFrameRate())
         shootingStarY = shootingStarY + height/(yMoveingSpeedFast*10*p5.getFrameRate());
       }
@@ -85,7 +115,7 @@ function ShootingStar(props) {
       
     }
 
-    if (currentState == CATCH_STATUS.WAITING){
+    if (props.currentState == CATCH_STATUS.WAITING){
       shootingStarX = 0.8 * width;
       shootingStarY = 0;
     }

@@ -1,15 +1,10 @@
 import Fade from '@mui/material/Fade';
-import Sketch from 'react-p5';
 import React , { useEffect, useRef, useState }from "react";
 import * as ml5 from 'ml5';
 import LinearProgress from '@mui/material/LinearProgress';
-import Button from '@mui/material/Button';
 import ShootingStar from "./ShootingStar";
 
-import { drawHand, drawPose, checkHandStatus,HAND_STATUS,drawFace, isEyePraying, CATCH_STATUS, appState} from "../utilities";
-
-import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
-import * as tf from '@tensorflow/tfjs-core';
+import { checkHandStatus,HAND_STATUS, CATCH_STATUS, appState} from "../utilities";
 import '@tensorflow/tfjs-backend-webgl';
 import "./Game.css"
 
@@ -106,7 +101,6 @@ function Game (props){
         }
       
         return ()=>{
-            console.log('clear timer')
             timer&&clearInterval(timer)
         }
     },[catchStatus, direction])
@@ -127,7 +121,6 @@ function Game (props){
             console.log('poseNet Loaded!');
         }
         poseNet.on('pose', (results) => {
-            // drawPose(results, canvasRef.current)
             let handState = checkHandStatus(results, canvasRef.current);
             if (handState == HAND_STATUS.PRAYING) {
                 setDirection(1)

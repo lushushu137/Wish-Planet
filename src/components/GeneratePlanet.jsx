@@ -7,7 +7,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton } from '@mui/material';
 import Fade from '@mui/material/Fade';
-import { NoEncryption } from '@mui/icons-material';
 
 function GeneratePlanet(props) {
     const [state, setState] = useState(generatingState.BEFORE);
@@ -79,7 +78,6 @@ function GeneratePlanet(props) {
         p5Context.p5.saveCanvas(p5Context.cnv, 'myPlanet', 'jpg');
     }
     const handleSend = () =>{
-        console.log(p5Context.cnv.canvas.toDataURL())
         setState(generatingState.SEND);
         // hide whole panel
         setFadeIn(false);

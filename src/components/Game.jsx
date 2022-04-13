@@ -1,3 +1,4 @@
+import Fade from '@mui/material/Fade';
 import Sketch from 'react-p5';
 import React , { useEffect, useRef, useState }from "react";
 import * as ml5 from 'ml5';
@@ -19,10 +20,13 @@ const height = 300;
 function Game (props){
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+    const stateRef = useRef(null);
     const [text, setText] = useState("")
     const [progress, setProgress] = useState(0)
     const [direction, setDirection] = useState(0) // increase or decrease
     const [catchStatus, setCatchStatus] = useState(CATCH_STATUS.WAITING) 
+    const [fadeIn, setFadeIn] = useState(true);
+
     // set video
     useEffect(() => {
         navigator.mediaDevices
@@ -33,46 +37,58 @@ function Game (props){
             videoRef.current.onloadeddata = start;
         });
     }, [])
-
+    useEffect(() => {
+        stateRef.current = catchStatus;
+      }, [catchStatus]);
+    
     // state machine
     useEffect(() => {
+        let waitTimeOut, catchTimeOut, successTimeOut, failTimeOut;
         switch (catchStatus){
             case CATCH_STATUS.WAITING:
                 setText("waiting for a star...")
                 setProgress(0);
                 setDirection(0);
-                setTimeout(() => {
+                waitTimeOut = setTimeout(() => {
                     setCatchStatus(CATCH_STATUS.CATCHING)
                 }, 5000)
                 return;
             case CATCH_STATUS.CATCHING:
                 setText("Quick! Make a wish!")
-                setTimeout(()=>{
-                    setCatchStatus(CATCH_STATUS.FAIL)
+                catchTimeOut = setTimeout(()=>{
+                    if (stateRef.current == CATCH_STATUS.CATCHING){
+                        setCatchStatus(CATCH_STATUS.FAIL)
+                    }
                 }, 10000)
                 return;
             case CATCH_STATUS.SUCCESS:
                 setText("You caught a star :)")
-                setTimeout(() => props.toNextState(appState.GENERATING), 2000)
+                successTimeOut=setTimeout(
+                    () => {
+                        setFadeIn(false)
+                        setTimeout(()=>props.toNextState(appState.GENERATING),1000)
+                    }, 2000)
                 return;
             
             case CATCH_STATUS.FAIL:
                 setText("You missed a star :(")
-                setTimeout(() => {
+                failTimeOut = setTimeout(() => {
                     setCatchStatus(CATCH_STATUS.WAITING)
                 }, 2000)
                 return;
             default:
                 break;
         }
+        return (
+            () => {
+                clearTimeout(waitTimeOut)
+                clearTimeout(catchTimeOut)
+                clearTimeout(successTimeOut)
+                clearTimeout(failTimeOut)
+            }
+        )
     },[catchStatus])
 
-    // after 5s shoot a star
-    useEffect(()=>{
-        setTimeout(()=>{
-            setCatchStatus(CATCH_STATUS.CATCHING)
-        }, 5000)
-    },[])
 
     // progress
     useEffect(()=>{
@@ -111,7 +127,7 @@ function Game (props){
             console.log('poseNet Loaded!');
         }
         poseNet.on('pose', (results) => {
-            drawPose(results, canvasRef.current)
+            // drawPose(results, canvasRef.current)
             let handState = checkHandStatus(results, canvasRef.current);
             if (handState == HAND_STATUS.PRAYING) {
                 setDirection(1)
@@ -121,6 +137,8 @@ function Game (props){
         });
     }
     return (
+    <Fade in={fadeIn} timeout={1000}>
+        
         <div className="Game">
             <h2>{text}</h2>
             <LinearProgress 
@@ -151,6 +169,8 @@ function Game (props){
               currentState={catchStatus}
             />
         </div>
+    </Fade> 
+
       );   
 }
 

@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { appState } from "../utilities";
 import "./Tutorial.css"
+import Fade from '@mui/material/Fade';
 
 
 function Tutorial(props) {
+    const [fadeIn, setFadeIn] = useState(true);
     const handleClick = () => {
-        props.toNextState(appState.GAMING)
+        setFadeIn(false);
+        setTimeout(()=>props.toNextState(appState.GAMING), 1000)
     }
 
-    return ( <div className='Tutorial'>
+    return ( 
+        <Fade in={fadeIn} timeout={1000}>
+    
+    <div className='Tutorial'>
         <div className="container">
             <p>{"Catch a shooting star by putting your hands together!"}</p>
             <div className="tutorial-pic">
@@ -17,7 +23,10 @@ function Tutorial(props) {
             <button className="btn" onClick={handleClick}>LET'S GO</button>
         </div>
         
-    </div> );
+    </div> 
+    </Fade> 
+    
+    );
 }
 
 export default Tutorial;

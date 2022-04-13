@@ -6,14 +6,18 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import SendIcon from '@mui/icons-material/Send';
 import { IconButton } from '@mui/material';
+import Fade from '@mui/material/Fade';
+import { NoEncryption } from '@mui/icons-material';
 
 function GeneratePlanet(props) {
     const [state, setState] = useState(generatingState.BEFORE);
     const [p5Context, setP5Context] = useState(null);
     const [name, setName] = useState("");
+    const [fadeIn, setFadeIn] = useState(true);
+    const [imgFadeIn, setImgFadeIn] = useState(false);
     
-    const handleState = (state, p5, cnv) =>{
-        setState(state);
+    const handleState = (comingstate, p5, cnv) =>{
+        setState(comingstate);
         setP5Context({p5, cnv})
     }
     const  CurentTime = () =>
@@ -65,6 +69,8 @@ function GeneratePlanet(props) {
                  <p>A planet.. dedicated to you!</p>
                         <p></p>
           </>
+            //  case generatingState.SEND:
+            //     return <></>
             default:
             break
         }
@@ -73,50 +79,81 @@ function GeneratePlanet(props) {
         p5Context.p5.saveCanvas(p5Context.cnv, 'myPlanet', 'jpg');
     }
     const handleSend = () =>{
-        console.log(name);
-        console.log(p5Context.cnv)
-        console.log(p5Context.drawingContext)
-        props.saveScreenShot(p5Context.cnv.canvas.toDataURL())
-        props.toNextState(appState.GAMING)
+        console.log(p5Context.cnv.canvas.toDataURL())
+        setState(generatingState.SEND);
+        // hide whole panel
+        setFadeIn(false);
+        setTimeout(()=>{
+            // 星球动画
+            setImgFadeIn(true);
+            setTimeout(()=>{
+                setImgFadeIn(false);
+                setTimeout(
+                    ()=>props.toNextState(appState.GAMING)
+                ,1000)
+                
+            }, 5000)
+        }, 500)
+        
     }
     const handleChange = (event) => {
         setName(event.target.value)
     }
     return ( 
-    <div className='GeneratePlanet'>
-        <div className='container'>
-           {renderText()}
-            <GenerateInP5 setGeneratingState={handleState}/>
-            {state == generatingState.END ? 
-            <div className='btnContainer'>
-                
-                <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={'text'}
-                    value={name}
-                    onChange={handleChange}
-                    placeholder="Give your planet a name"
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton>
-                                <SendIcon
-                                    aria-label="toggle password visibility"
-                                    onClick={handleSend}
-                                    edge="end"
-                                >
-                                </SendIcon>
-                            </IconButton>
-                        </InputAdornment>
+        <>
+            <Fade in={fadeIn} timeout={1000}>
+                <div className='GeneratePlanet'>
+                    <div className='container'>
+                    {renderText()}
+                        <GenerateInP5 setGeneratingState={handleState}/>
+                        {state == generatingState.END ? 
+                        <div className='btnContainer'>
+                            
+                            <OutlinedInput
+                                id="outlined-adornment-password"
+                                type={'text'}
+                                value={name}
+                                onChange={handleChange}
+                                placeholder="Give your planet a name"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={handleSend}>
+                                            <SendIcon
+                                                aria-label="toggle password visibility"
+                                                edge="end"
+                                            >
+                                            </SendIcon>
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password"
+                            />
+                            {/* <button className='btn' onClick={handleDownload}>DOWNLOAD</button>  */}
+                        </div>
+                        
+                        : null
                     }
-                    label="Password"
-                />
-                <button className='btn' onClick={handleDownload}>DOWNLOAD</button> 
-            </div>
-            
-            : null
-        }
-        </div>
-    </div> 
+                    </div>
+                </div> 
+            </Fade> 
+            {state == generatingState.SEND ? 
+            <Fade in={imgFadeIn} timeout={1000}>
+
+                <img src={p5Context.cnv.canvas.toDataURL()} style={{
+                    'position':'absolute',
+                    'top':'50%',
+                    'left': '50%',
+                    'width':400,
+                    'height':400,
+                    'border':'none',
+                    'transform': 'translate(-50%, -50%)'
+                }}/>
+            </Fade>
+
+            : null}
+
+        </>
+   
     );
 }
 

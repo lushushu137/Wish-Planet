@@ -2,8 +2,8 @@ import Sketch from 'react-p5';
 import React , { useEffect, useRef, useState }from "react";
 import 'p5/lib/addons/p5.sound';
 import "./GenerateInP5.css"
-import {generatingState} from '../utilities'
-
+import {generatingState} from '../utilities';
+import generatedSoundSource from "../asset/music/generated.wav";
 let seed = 2000;
 
 let mic;
@@ -29,17 +29,22 @@ let m = 200;
 let n = 200;
 
 let state = generatingState.BEFORE;
-
+let generatedSound;
 function GenerateInP5(props) {
   const setup = (p5, canvasParentRef) => {
+
+    p5.soundFormats('wav', 'ogg');
+    generatedSound = p5.loadSound(generatedSoundSource);
+
+
+
+
+
     let cnv = p5.createCanvas(canvaswidth, canvasheight).parent(canvasParentRef);
-     //pixelDensity(5);
     p5.randomSeed(seed);
 
     inColor = p5.color("#3B6A9E");
     outColor = p5.color("#EEFC84E8");
-    // backgroundColor = p5.color("#2E2167");
-    // p5.background(backgroundColor);
     mic = new p5.constructor.AudioIn();
     fft = new p5.constructor.FFT();
     mic.start();
@@ -48,19 +53,19 @@ function GenerateInP5(props) {
     const start = () => {
       p5.userStartAudio();
       props.setGeneratingState(generatingState.MIDDLE)
+      setTimeout(()=>{
+        mic.stop();
+        generatedSound.play()
+        props.setGeneratingState(generatingState.END, p5, cnv)
+        cnv.mousePressed(()=>{});
+        console.log(p5.getAudioContext());
+      }, 3000)
     }
 
-
-    p5.getAudioContext().suspend();
+    p5.getAudioContext().suspend()
     cnv.mousePressed(start);
 
-    setTimeout(()=>{
-      mic.stop();
-      props.setGeneratingState(generatingState.END, p5, cnv)
-      cnv.mousePressed(()=>{});
-
-      // p5.saveCanvas(cnv, 'myPlanet', 'jpg');
-    }, 10000)
+   
 
   
   }
@@ -73,19 +78,6 @@ function GenerateInP5(props) {
    p5.fill(0,10,70,100);
    p5.circle(200, 200, circleSize);
   
-
-  //  switch (state){
-  //   case generatingState.BEFORE:
-  //     //画一个tell me your wish
-  //     return;
-  //   case generatingState.MIDDLE:
-  //     //小时
-  //     return;
-  //   case generatingState.END:
-  //     //
-  //     return;
-  // }
-
 
   //Sound visual
   let wave = fft.waveform(); //每一帧得到一串数组1024个

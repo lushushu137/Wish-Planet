@@ -29,6 +29,7 @@ export const generatingState = {
   BEFORE: Symbol(),
   MIDDLE: Symbol(),
   END: Symbol(),
+  SEND: Symbol(),
 };
 
 // visualize posenet
@@ -55,8 +56,8 @@ export const drawPose = (predictions, canvas) => {
 };
 
 export const checkHandStatus = (predictions, canvas) => {
-  const ctx = canvas.getContext("2d");
-  if (predictions.length > 0) {
+  const ctx = canvas?.getContext("2d");
+  if (predictions.length > 0 && !!canvas) {
     let leftEar = predictions[0].pose.leftEar;
     let rightEar = predictions[0].pose.rightEar;
     let leftWrist = predictions[0].pose.leftWrist;
@@ -111,14 +112,6 @@ export const drawFace = (predictions, canvas) => {
   ctx.font = "14px serif";
   ctx.fillStyle = "white";
   if (predictions.length > 0) {
-    // const collectedEyePoints = eyePoints.map((p) => {
-    //   return predictions[0].annotations[p];
-    // });
-    // collectedEyePoints.forEach((p) => {
-    //   p.forEach((sp) => {
-    //     ctx.fillText("·", sp[0], sp[1]);
-    //   });
-    // });
     for (let i = 0; i < predictions.length; i += 1) {
       const keypoints = predictions[i].scaledMesh;
       // Draw facial keypoints.

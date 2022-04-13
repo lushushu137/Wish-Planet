@@ -1,7 +1,12 @@
 import React from 'react';
 import Sketch from 'react-p5';
+import "./Background.css"
+import 'p5/lib/addons/p5.sound';
+
 
 function Background() {
+
+
   function Point(x, y) {
     this.x = x;
     this.y = y;
@@ -18,13 +23,16 @@ function Background() {
   let ctx;
   let height;
   let width;
+  let bgm;
+
+
   const setup = (p5, canvasParentRef) => {
     [height, width] = [p5.windowHeight, p5.windowWidth];
-    p5.createCanvas(width, height).parent(canvasParentRef);
+    let cns = p5.createCanvas(width, height).parent(canvasParentRef);
     ctx = p5.drawingContext;
     p5.background(255, 130, 20);
-
     generate();
+
   };
   function generate() {
     sky(palette[6], palette[4]);
@@ -179,10 +187,10 @@ function Background() {
   }
 
   const draw = (p5) => {
+
   };
   return  <div className="Background">
     <Sketch setup={setup} draw={draw} />
-
   </div>
 }
 

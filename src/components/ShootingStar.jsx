@@ -1,6 +1,13 @@
 import Sketch from 'react-p5';
 import React , { useEffect, useState }from "react";
 import { CATCH_STATUS } from "../utilities";
+import {starData} from "../starData";
+import PlanetCard from "./PlanetCard"
+import "./ShootingStar.css"
+import shootingSound from "../asset/music/shooting.wav"
+import caughtSound from "../asset/music/caught.wav"
+
+import useSound from 'use-sound';
 
 let height;
 let width;
@@ -11,14 +18,28 @@ let xMovingSpeedSlow = 6;
 let yMoveingSpeedFast = 1;
 let yMoveingSpeedSlow = 3;
 
+let hoverState = undefined
+
 function ShootingStar(props) {
   const [direction, setDirection] = useState(0);
   const [currentState, setCurrentState] = useState(CATCH_STATUS.WAITING);
+  const [showCard, setShowCard] = useState(undefined);
+  const [playShooting] = useSound(shootingSound)
+  const [playSuccess] = useSound(caughtSound)
+  
   useEffect(() =>{
     setDirection(props.direction)
     setCurrentState(props.currentState)
   }, [props.direction, props.currentState]);
 
+  useEffect(()=>{
+    if (props.currentState == CATCH_STATUS.CATCHING){
+      playShooting();
+    }
+    if (props.currentState == CATCH_STATUS.SUCCESS){
+      playSuccess();
+    }
+  },[props.currentState])
 
   const setup = (p5, canvasParentRef) => {
     [height, width] = [p5.windowHeight, p5.windowWidth];
@@ -26,6 +47,21 @@ function ShootingStar(props) {
     
     shootingStarX = 0.8 * width;
     shootingStarY = 0;
+  }
+  function star(x, y, radius1, radius2, npoints, p5) {
+    let angle = p5.TWO_PI / npoints;
+    let halfAngle = angle / 2.0;
+    p5.stroke(0, 0, 0, 0.8);
+    p5.beginShape();
+    for (let a = 0; a < p5.TWO_PI; a += angle) {
+      let sx = x + p5.cos(a) * radius2;
+      let sy = y + p5.sin(a) * radius2;
+      p5.vertex(sx, sy);
+      sx = x + p5.cos(a + halfAngle) * radius1;
+      sy = y + p5.sin(a + halfAngle) * radius1;
+      p5.vertex(sx, sy);
+    }
+    p5.endShape(p5.CLOSE);
   }
   const draw = (p5) => {
     p5.clear();
@@ -53,42 +89,34 @@ function ShootingStar(props) {
       shootingStarX = 0.8 * width;
       shootingStarY = 0;
     }
-   
-    
-    p5.push();
-    p5.translate(width * 0.5, height * 0.1);
-    p5.rotate(p5.frameCount / -200.0);
-    star(0,0, 4, 20, 6,p5);
-    p5.pop();
-
-    p5.push();
-    p5.translate(width * 0.1, height * 0.2);
-    p5.rotate(p5.frameCount / -200.0);
-    star(0,0, 3, 15, 6,p5);
-    p5.pop();
-
-
-};
-
-function star(x, y, radius1, radius2, npoints, p5) {
-    
-    let angle = p5.TWO_PI / npoints;
-    let halfAngle = angle / 2.0;
-    p5.stroke(0,0,0,0.8)
-    p5.beginShape();
-    for (let a = 0; a < p5.TWO_PI; a += angle) {
-      let sx = x + p5.cos(a) * radius2;
-      let sy = y + p5.sin(a) * radius2;
-      p5.vertex(sx, sy);
-      sx = x + p5.cos(a + halfAngle) * radius1;
-      sy = y + p5.sin(a + halfAngle) * radius1;
-      p5.vertex(sx, sy);
+    // many stars
+    for (let i = 0; i < starData.length; i++){
+      p5.push();
+      p5.translate(starData[i].x*width, height * starData[i].y);
+      p5.rotate(p5.frameCount / -200.0);
+      star(0, 0, starData[i].radius1, starData[i].radius2, 6,p5);
+      p5.pop();
     }
-    p5.endShape(p5.CLOSE);
-  }
-  
+    //wrong
+    let hit = false;
+    for (let i = 0; i < starData.length; i++){
+      let distance =p5.dist(p5.mouseX, p5.mouseY, starData[i].x*width, height * starData[i].y)
+      if (distance < starData[i].radius2) {
+        hit = true
+        hoverState = starData[i]
+        setShowCard({...hoverState, posX: p5.mouseX, posY:p5.mouseY+80});
+      }
+    
+    }  
+
+    if (!hit){
+      hoverState = undefined;
+    setShowCard(undefined)
+    }
+};
   return (<div className="ShootingStar" style={{position:"absolute"}}>
   <Sketch setup={setup} draw={draw} />
+  {showCard ? <PlanetCard planetInfo = {showCard}/> : null}
   </div>);
   }
 

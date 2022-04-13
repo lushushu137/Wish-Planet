@@ -5,9 +5,9 @@ import Background from "./components/Background";
 import Welcome from "./components/Welcome";
 import Tutorial from "./components/Tutorial";
 import GeneratePlanet from "./components/GeneratePlanet";
-import PlanetCard from "./components/PlanetCard";
 import Game from "./components/Game";
 import { appState } from "./utilities";
+import { Fade } from "@mui/material";
 
 function App() {
   const [state, setState] = useState(appState.WELCOME);
@@ -28,11 +28,7 @@ function App() {
       case appState.TUTORIAL:
         return <Tutorial toNextState={changeAppState} />;
       case appState.GAMING:
-        return (
-          <>
-            <Game toNextState={changeAppState} />
-          </>
-        );
+        return <Game toNextState={changeAppState} />;
       case appState.GENERATING:
         return (
           <GeneratePlanet

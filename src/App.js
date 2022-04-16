@@ -10,15 +10,15 @@ import { appState } from "./utilities";
 import { Fade } from "@mui/material";
 
 function App() {
-  const [state, setState] = useState(appState.WELCOME);
-  const [screenShot, setScreenShot] = useState("");
+  const [state, setState] = useState(appState.GENERATING);
+  const [starData, setStarData] = useState(undefined);
 
   const changeAppState = (state) => {
     setState(state);
   };
 
-  const saveScreenShot = (url) => {
-    setScreenShot(url);
+  const saveStar = (url) => {
+    setStarData(url);
   };
 
   const renderApp = () => {
@@ -28,13 +28,16 @@ function App() {
       case appState.TUTORIAL:
         return <Tutorial toNextState={changeAppState} />;
       case appState.GAMING:
-        return <Game toNextState={changeAppState} />;
+        return (
+          <Game
+            toNextState={changeAppState}
+            newStarData={starData}
+            clearNewStar={saveStar}
+          />
+        );
       case appState.GENERATING:
         return (
-          <GeneratePlanet
-            toNextState={changeAppState}
-            saveScreenShot={saveScreenShot}
-          />
+          <GeneratePlanet toNextState={changeAppState} saveStar={saveStar} />
         );
       // case appState.CHECKPlANET:
       //   return <PlanetCard />;

@@ -22,8 +22,8 @@
 img{
     display: inline-block;
     width: 300px;
-    height: 200px;
-    border: solid 1px;
+    /* height: 200px; */
+    /* border: solid 1px; */
 }
 .btn{
     width: 200px;

@@ -23,6 +23,14 @@
   z-index: 3;
 }
 
+.guide{
+  position: absolute;
+  width:400px;
+  height: 300px;
+  z-index: 4;
+
+}
+
 .MuiLinearProgress-root {
   display: inline-block;
   height: 80px;

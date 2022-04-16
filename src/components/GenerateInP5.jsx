@@ -4,6 +4,11 @@ import 'p5/lib/addons/p5.sound';
 import "./GenerateInP5.css"
 import {generatingState} from '../utilities';
 import generatedSoundSource from "../asset/music/generated.wav";
+import MicIcon from '@mui/icons-material/Mic';
+import { IconButton } from '@mui/material';
+import {theme} from "../styles"
+import { ThemeProvider } from '@mui/material/styles';
+
 let seed = 2000;
 
 let mic;
@@ -28,17 +33,15 @@ let wavePos = [];
 let m = 200;
 let n = 200;
 
-let state = generatingState.BEFORE;
 let generatedSound;
 function GenerateInP5(props) {
+  const btnRef = useRef(null);
+  const [state, setState] = useState(generatingState.BEFORE)
+
   const setup = (p5, canvasParentRef) => {
 
     p5.soundFormats('wav', 'ogg');
     generatedSound = p5.loadSound(generatedSoundSource);
-
-
-
-
 
     let cnv = p5.createCanvas(canvaswidth, canvasheight).parent(canvasParentRef);
     p5.randomSeed(seed);
@@ -52,22 +55,22 @@ function GenerateInP5(props) {
 
     const start = () => {
       p5.userStartAudio();
+      setState(generatingState.MIDDLE)
       props.setGeneratingState(generatingState.MIDDLE)
       setTimeout(()=>{
         mic.stop();
         generatedSound.play()
+        setState(generatingState.END)
         props.setGeneratingState(generatingState.END, p5, cnv)
         cnv.mousePressed(()=>{});
         console.log(p5.getAudioContext());
-      }, 3000)
+      }, 10000)
     }
 
     p5.getAudioContext().suspend()
-    cnv.mousePressed(start);
 
-   
+    btnRef.current?.addEventListener('click', start)
 
-  
   }
 
 
@@ -159,7 +162,25 @@ function GenerateInP5(props) {
 
 
   return <div className='GenerateInP5'>
+  {state == generatingState.END ? null : 
+    <div className='start-icon'>
+          <ThemeProvider theme={theme}>
+
+      <IconButton 
+        ref={btnRef} 
+        color={
+          state == generatingState.BEFORE ? "primary" 
+          : "secondary"
+        } 
+        >
+            <MicIcon></MicIcon>
+      </IconButton>
+      </ThemeProvider>
+  </div>
+  }
+  
   <Sketch setup={setup} draw={draw} />
+    
   </div>;
 
 }

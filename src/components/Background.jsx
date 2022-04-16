@@ -23,7 +23,6 @@ function Background() {
   let ctx;
   let height;
   let width;
-  let bgm;
 
 
   const setup = (p5, canvasParentRef) => {

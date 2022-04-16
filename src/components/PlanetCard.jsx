@@ -4,14 +4,13 @@ import "./PlanetCard.css"
 
 
 function PlanetCard(props) {
-    useEffect(()=>{
-        console.log(props)
-    },[])
+    const {posX, posY, url, from, time, name} = props.planetInfo
     return ( <div className='PlanetCard'>
-        <div className="card-container" style={{"top": props.planetInfo.posY,"left": props.planetInfo.posX}}>
-            <img src="" alt="planet pic" />
-            <p>From {props.planetInfo.from}</p>
-            <p>{`(${props.planetInfo.time})`}</p>
+        <div className="card-container" style={{"top": posY,"left": posX}}>
+            <img src={url} alt="planet pic" style={{"width": 200, "height":200}}/>
+            <p>From {from}</p>
+            <p>{name}'s Planet</p>
+            <p>{`(${time})`}</p>
         </div>
     </div> );
 }

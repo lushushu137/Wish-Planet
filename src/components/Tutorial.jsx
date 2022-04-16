@@ -1,8 +1,12 @@
+import { ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import {theme} from "../styles"
+
 import React, { useState } from 'react';
 import { appState } from "../utilities";
 import "./Tutorial.css"
 import Fade from '@mui/material/Fade';
-
+import GuideGif from '../asset/pic/guidegif.gif'
 
 function Tutorial(props) {
     const [fadeIn, setFadeIn] = useState(true);
@@ -18,9 +22,15 @@ function Tutorial(props) {
         <div className="container">
             <p>{"Catch a shooting star by putting your hands together!"}</p>
             <div className="tutorial-pic">
-                <img src="" alt="some pic here"></img>
+                <img src={GuideGif} alt="some pic here"></img>
             </div>
-            <button className="btn" onClick={handleClick}>LET'S GO</button>
+            <ThemeProvider theme={theme}>
+            <Button 
+                onClick={handleClick}
+                variant="outlined"
+                disableElevation
+            >LET'S GO</Button>
+            </ThemeProvider>
         </div>
         
     </div> 

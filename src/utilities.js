@@ -18,6 +18,7 @@ export const HAND_STATUS = {
 };
 
 export const CATCH_STATUS = {
+  SHOW_LAST_STAR: Symbol(),
   WAITING: Symbol(),
   CATCHING: Symbol(),
   SUCCESS: Symbol(),
@@ -56,30 +57,31 @@ export const drawPose = (predictions, canvas) => {
 };
 
 export const checkHandStatus = (predictions, canvas) => {
-  const ctx = canvas?.getContext("2d");
-  if (predictions.length > 0 && !!canvas) {
+  // const ctx = canvas?.getContext("2d");
+  if (predictions.length > 0) {
+    // if (predictions.length > 0 && !!canvas) {
     let leftEar = predictions[0].pose.leftEar;
     let rightEar = predictions[0].pose.rightEar;
     let leftWrist = predictions[0].pose.leftWrist;
     let rightWrist = predictions[0].pose.rightWrist;
 
-    ctx.font = "30px serif";
-    ctx.fillStyle = "white";
+    // ctx.font = "30px serif";
+    // ctx.fillStyle = "white";
     if (
       leftWrist.confidence < WRIST_THRESHOL &&
       rightWrist.confidence < WRIST_THRESHOL
     ) {
-      ctx.fillText("not detecting hands", 250, 500);
+      // ctx.fillText("not detecting hands", 250, 500);
       return HAND_STATUS.NO_HAND;
     } else if (
       leftEar.x - 50 < leftWrist.x &&
       leftWrist.x < rightWrist.x &&
       rightWrist.x < rightEar.x + 50
     ) {
-      ctx.fillText("praying!", 250, 500);
+      // ctx.fillText("praying!", 250, 500);
       return HAND_STATUS.PRAYING;
     } else {
-      ctx.fillText("not praying", 250, 500);
+      // ctx.fillText("not praying", 250, 500);
       return HAND_STATUS.NOT_PRAYING;
     }
   }
@@ -156,3 +158,7 @@ function getEucledianDistance(x1, y1, x2, y2) {
 }
 
 export const isEyePraying = (predictions, canvas) => {};
+
+export const sleep = (milliseconds) => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+};

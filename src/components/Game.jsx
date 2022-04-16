@@ -3,8 +3,10 @@ import React , { useEffect, useRef, useState }from "react";
 import * as ml5 from 'ml5';
 import LinearProgress from '@mui/material/LinearProgress';
 import ShootingStar from "./ShootingStar";
+import guide from '../asset/pic/guide.png'
+import guide2 from '../asset/pic/guide2.png'
 
-import { checkHandStatus,HAND_STATUS, CATCH_STATUS, appState} from "../utilities";
+import { checkHandStatus,HAND_STATUS, CATCH_STATUS, appState, sleep} from "../utilities";
 import '@tensorflow/tfjs-backend-webgl';
 import "./Game.css"
 
@@ -19,7 +21,7 @@ function Game (props){
     const [text, setText] = useState("")
     const [progress, setProgress] = useState(0)
     const [direction, setDirection] = useState(0) // increase or decrease
-    const [catchStatus, setCatchStatus] = useState(CATCH_STATUS.WAITING) 
+    const [catchStatus, setCatchStatus] = useState(CATCH_STATUS.SHOW_LAST_STAR) 
     const [fadeIn, setFadeIn] = useState(true);
 
     // set video
@@ -38,8 +40,19 @@ function Game (props){
     
     // state machine
     useEffect(() => {
-        let waitTimeOut, catchTimeOut, successTimeOut, failTimeOut;
+        let showLastStarTimeOut, waitTimeOut, catchTimeOut, successTimeOut, failTimeOut;
         switch (catchStatus){
+            case CATCH_STATUS.SHOW_LAST_STAR:
+                if (!!props.newStarData){
+                    console.log(props.newStarData);
+                    showLastStarTimeOut = setTimeout(()=>{
+                        props.clearNewStar(undefined)
+                        setCatchStatus(CATCH_STATUS.WAITING)
+                    }, 3000)
+                } else {
+                    setCatchStatus(CATCH_STATUS.WAITING)
+                }
+                return;
             case CATCH_STATUS.WAITING:
                 setText("waiting for a star...")
                 setProgress(0);
@@ -80,6 +93,7 @@ function Game (props){
                 clearTimeout(catchTimeOut)
                 clearTimeout(successTimeOut)
                 clearTimeout(failTimeOut)
+                clearTimeout(showLastStarTimeOut)
             }
         )
     },[catchStatus])
@@ -131,7 +145,6 @@ function Game (props){
     }
     return (
     <Fade in={fadeIn} timeout={1000}>
-        
         <div className="Game">
             <h2>{text}</h2>
             <LinearProgress 
@@ -149,17 +162,23 @@ function Game (props){
                     className="video"
                     width={width}
                     height={height}
+                    style={{"opacity": catchStatus == CATCH_STATUS.SHOW_LAST_STAR ? 0 : 1}}
                 />
-                <canvas
+                {/* <canvas
                     ref={canvasRef}
                     className="canvas"  
                     width={width}
                     height={height}
-                ></canvas>
+                ></canvas> */}
+                <Fade in={catchStatus == CATCH_STATUS.CATCHING} timeout={1000}>
+                    <img className='guide' src={guide2} />
+                </Fade> 
+                
              </div>
              <ShootingStar
               direction={direction}
               currentState={catchStatus}
+              newStar={props.newStarData}
             />
         </div>
     </Fade> 

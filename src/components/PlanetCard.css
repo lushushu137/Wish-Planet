@@ -11,7 +11,7 @@
 
 
 .card-container {
-    font-size: 20px;
+    font-size: 14px;
     position: absolute;
     padding: 20px;
     border-radius: 20px;
@@ -21,5 +21,5 @@
     justify-content: center;
     flex-direction: column;
     color: white;
-    transform: translateX(-50%);
+    /* transform: translateX(-50%); */
 }

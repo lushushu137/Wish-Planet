@@ -10,7 +10,7 @@ import { appState } from "./utilities";
 import { Fade } from "@mui/material";
 
 function App() {
-  const [state, setState] = useState(appState.GENERATING);
+  const [state, setState] = useState(appState.WELCOME);
   const [starData, setStarData] = useState(undefined);
 
   const changeAppState = (state) => {

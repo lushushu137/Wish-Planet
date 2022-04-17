@@ -1,4 +1,3 @@
-import { alpha, styled } from '@mui/material/styles';
 import {theme} from "../styles"
 import { ThemeProvider } from '@mui/material/styles';
 import GenerateInP5 from './GenerateInP5';
@@ -6,16 +5,13 @@ import "./GeneratePlanet.css";
 import React , { useEffect, useRef, useState }from "react";
 import {generatingState, appState, sleep} from '../utilities'
 import InputBase from '@mui/material/InputBase';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import SendIcon from '@mui/icons-material/Send';
-import Input from '@mui/icons-material/Input';
 import BlingBling from './BlingBlingP5';
 
 import { IconButton } from '@mui/material';
 import Fade from '@mui/material/Fade';
 import {newStar, starName} from "../starData";
-import TextField from '@mui/material/TextField';
 
 
 
@@ -72,14 +68,14 @@ function GeneratePlanet(props) {
                     </>
             case generatingState.MIDDLE:
                 return <>
-                        <p>GENRATING...</p>
+                        <p>I'M LISTENING...</p>
 
                         <p></p>
 
                 </>
             case generatingState.END:
                 return <>
-                 <p>A planet.. dedicated to you!</p>
+                 <p>A PLANET.. DEDICATED TO YOU!</p>
                         <p></p>
           </>
             default:
@@ -181,6 +177,9 @@ function GeneratePlanet(props) {
                     <div className="generatePlanet-middle">
                         <GenerateInP5 setGeneratingState={handleState}/>
                         <BlingBling/>
+                        {/* {state == generatingState.END && name.length > 0 ? 
+                        <div className="generatePlanet-middle-name">{`${name}'s planet`}</div> :null
+                        } */}
                         </div>
                     <div className="generatePlanet-bottom">{renderBottomText()}</div>
                     </div>

@@ -24,16 +24,17 @@ function Game (props){
     const [catchStatus, setCatchStatus] = useState(CATCH_STATUS.SHOW_LAST_STAR) 
     const [fadeIn, setFadeIn] = useState(true);
 
-    // set video
-    useEffect(() => {
-        navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then((stream) => {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play();
-            videoRef.current.onloadeddata = start;
-        });
-    }, [])
+
+    // notify App catchStatus
+    useEffect(()=>{
+        props.setCatchStatus(catchStatus)
+    }, [catchStatus])
+
+    // recieve direction from App
+    useEffect(()=>{
+        setDirection(props.direction)
+    }, [props.direction])
+
     useEffect(() => {
         stateRef.current = catchStatus;
       }, [catchStatus]);
@@ -120,30 +121,6 @@ function Game (props){
         }
     },[catchStatus, direction])
 
-
-    
-    const start = ()=>{
-        // detect hands closing;
-        startPoseNet()
-    }
-      
-    const startPoseNet = async() =>{
-        const poseNet = ml5.poseNet(videoRef.current, {
-            flipHorizontal:true, 
-            detectionType:"single"
-        } , poseModelLoaded,);
-        function poseModelLoaded() {
-            console.log('poseNet Loaded!');
-        }
-        poseNet.on('pose', (results) => {
-            let handState = checkHandStatus(results, canvasRef.current);
-            if (handState == HAND_STATUS.PRAYING) {
-                setDirection(1)
-            } else {
-                setDirection(-1)
-            }
-        });
-    }
     return (
     <Fade in={fadeIn} timeout={1000}>
         <div className="Game">
@@ -157,25 +134,6 @@ function Game (props){
                     marginBottom: 20
                 }}
                 variant="determinate" value={progress}/>
-             <div className="videoAndCanvas">
-                <video
-                    ref={videoRef}
-                    className="video"
-                    width={width}
-                    height={height}
-                    style={{"opacity": catchStatus == CATCH_STATUS.SHOW_LAST_STAR ? 0 : 1}}
-                />
-                {/* <canvas
-                    ref={canvasRef}
-                    className="canvas"  
-                    width={width}
-                    height={height}
-                ></canvas> */}
-                <Fade in={catchStatus == CATCH_STATUS.CATCHING} timeout={1000}>
-                    <img className='guide' src={guide3} />
-                </Fade> 
-                
-             </div>
              <ShootingStar
               direction={direction}
               currentState={catchStatus}

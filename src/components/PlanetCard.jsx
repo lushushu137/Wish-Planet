@@ -4,7 +4,6 @@ import "./PlanetCard.css"
 
 function PlanetCard(props) {
     const {posX, posY, url, from, time, name} = props.planetInfo;
-    console.log('render card')
     
     return ( <div className='PlanetCard'>
         <div className="card-container" style={{"top": posY,"left": posX}}>

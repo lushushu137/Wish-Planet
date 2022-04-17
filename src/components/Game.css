@@ -8,28 +8,6 @@
   justify-content: center;
   /* transform: scale(50%); */
 }
-.videoAndCanvas {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.video {
-  transform: rotateY(180deg);
-  z-index: 3;
-}
-
-.canvas {
-  position: absolute;
-  z-index: 3;
-}
-
-.guide{
-  position: absolute;
-  width:400px;
-  height: 300px;
-  z-index: 4;
-
-}
 
 .MuiLinearProgress-root {
   display: inline-block;

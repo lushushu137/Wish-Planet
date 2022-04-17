@@ -11,15 +11,10 @@
 
 .generatePlanet-container {
     font-size: 20px;
-    /* padding: 30px 100px; */
-    /* width: 600px;
-    height: 700px;
-    border-radius: 30px; */
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    /* background-color: rgba(255,255,255,0.3); */
     color: gold;
 }
 
@@ -29,8 +24,15 @@
 .generatePlanet-middle{
     height: 400px;
     position: relative;
-
 }
+
+.generatePlanet-middle-name{
+    height: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .generatePlanet-bottom{
     height: 100px;
 

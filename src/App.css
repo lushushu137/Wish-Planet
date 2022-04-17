@@ -13,3 +13,25 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.videoAndCanvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 60vh;
+  position: absolute;
+  bottom: 0;
+}
+
+.video{
+  transform: rotateY(180deg);
+  z-index: 3;
+  position: absolute;
+}
+.guide{
+  position: absolute;
+  width:400px;
+  height: 300px;
+  z-index: 4;
+
+}

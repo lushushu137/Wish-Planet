@@ -7,15 +7,14 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    font-family: "Storybook";
 }
-
-.btn{
-    width: 100px;
-    height: 60px;
-    border: solid 2px white;
-    background:none;
-    border-radius: 20px;
-    text-align: center;
-    font-size: 24px;
-    color: white;
+h1 {
+    font-weight: normal;
+    margin-bottom: 0;
+}
+p{
+    font-size: 16px;
+    word-spacing: 5;
+    margin-top: 5px;
 }

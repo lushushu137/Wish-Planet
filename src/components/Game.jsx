@@ -5,7 +5,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import ShootingStar from "./ShootingStar";
 import guide from '../asset/pic/guide.png'
 import guide2 from '../asset/pic/guide2.png'
-
+import guide3 from '../asset/pic/guide3.png'
 import { checkHandStatus,HAND_STATUS, CATCH_STATUS, appState, sleep} from "../utilities";
 import '@tensorflow/tfjs-backend-webgl';
 import "./Game.css"
@@ -54,12 +54,12 @@ function Game (props){
                 }
                 return;
             case CATCH_STATUS.WAITING:
-                setText("waiting for a star...")
+                setText("Waiting for a star...")
                 setProgress(0);
                 setDirection(0);
                 waitTimeOut = setTimeout(() => {
                     setCatchStatus(CATCH_STATUS.CATCHING)
-                }, 5000)
+                }, 5000 * (props.gameLoop + 1))
                 return;
             case CATCH_STATUS.CATCHING:
                 setText("Quick! Make a wish!")
@@ -71,6 +71,7 @@ function Game (props){
                 return;
             case CATCH_STATUS.SUCCESS:
                 setText("You caught a star :)")
+                props.playSound("caughtSound");
                 successTimeOut=setTimeout(
                     () => {
                         setFadeIn(false)
@@ -146,7 +147,7 @@ function Game (props){
     return (
     <Fade in={fadeIn} timeout={1000}>
         <div className="Game">
-            <h2>{text}</h2>
+            <h3>{text}</h3>
             <LinearProgress 
                 sx={{
                     opacity: catchStatus == CATCH_STATUS.CATCHING ? 1 : 0,
@@ -171,7 +172,7 @@ function Game (props){
                     height={height}
                 ></canvas> */}
                 <Fade in={catchStatus == CATCH_STATUS.CATCHING} timeout={1000}>
-                    <img className='guide' src={guide2} />
+                    <img className='guide' src={guide3} />
                 </Fade> 
                 
              </div>

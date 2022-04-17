@@ -37,7 +37,7 @@ let generatedSound;
 function GenerateInP5(props) {
   const btnRef = useRef(null);
   const [state, setState] = useState(generatingState.BEFORE)
-
+  let recording = false;
   const setup = (p5, canvasParentRef) => {
 
     p5.soundFormats('wav', 'ogg');
@@ -53,23 +53,30 @@ function GenerateInP5(props) {
     mic.start();
     fft.setInput(mic);
 
+    const handleClick = () => {
+      if (recording){
+        stop()
+      } else {
+        start()
+        recording = !recording;
+      }
+    }
     const start = () => {
       p5.userStartAudio();
       setState(generatingState.MIDDLE)
       props.setGeneratingState(generatingState.MIDDLE)
-      setTimeout(()=>{
-        mic.stop();
-        generatedSound.play()
-        setState(generatingState.END)
-        props.setGeneratingState(generatingState.END, p5, cnv)
-        cnv.mousePressed(()=>{});
-        console.log(p5.getAudioContext());
-      }, 10000)
+    }
+    const stop =()=> {
+      mic.stop();
+      generatedSound.play()
+      setState(generatingState.END)
+      props.setGeneratingState(generatingState.END, p5, cnv)
+      btnRef.current?.removeEventListener('click', handleClick);
     }
 
     p5.getAudioContext().suspend()
 
-    btnRef.current?.addEventListener('click', start)
+    btnRef.current?.addEventListener('click', handleClick)
 
   }
 
@@ -167,13 +174,14 @@ function GenerateInP5(props) {
           <ThemeProvider theme={theme}>
 
       <IconButton 
+      size={"large"}
         ref={btnRef} 
         color={
           state == generatingState.BEFORE ? "primary" 
           : "secondary"
         } 
         >
-            <MicIcon></MicIcon>
+            <MicIcon fontSize="large"></MicIcon>
       </IconButton>
       </ThemeProvider>
   </div>

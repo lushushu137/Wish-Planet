@@ -38,6 +38,7 @@ export const starPos = [
 
 export const starData = [
   {
+    id: 0,
     x: 0.2,
     y: 0.1,
     radius1: 4,
@@ -48,6 +49,7 @@ export const starData = [
     time: "2022-1-1",
   },
   {
+    id: 1,
     x: 0.1,
     y: 0.2,
     radius1: 3,
@@ -58,6 +60,7 @@ export const starData = [
     time: "2022-2-21",
   },
   {
+    id: 2,
     x: 0.2,
     y: 0.3,
     radius1: 2,
@@ -68,6 +71,7 @@ export const starData = [
     time: "2022-3-14",
   },
   {
+    id: 3,
     x: 0.7,
     y: 0.2,
     radius1: 2,
@@ -81,6 +85,7 @@ export const starData = [
 
 export const newStar = (time, name, from, url) => {
   let newStarData = {
+    id: starData.length - 1,
     ...starPos[Math.floor(Math.random() * (starPos.length - 1))],
     from,
     time,

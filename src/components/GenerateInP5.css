@@ -1,5 +1,6 @@
 .GenerateInP5{
     position: relative;
+    z-index: 2;
 }
 
 .start-icon{

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Background from "./components/Background";
@@ -8,17 +8,31 @@ import GeneratePlanet from "./components/GeneratePlanet";
 import Game from "./components/Game";
 import { appState } from "./utilities";
 import { Fade } from "@mui/material";
+import caught from "./asset/music/caught.wav";
+import useSound from "use-sound";
+
+let gameLoop = -1;
 
 function App() {
   const [state, setState] = useState(appState.WELCOME);
   const [starData, setStarData] = useState(undefined);
+  const [playCaughtSound] = useSound(caught);
 
   const changeAppState = (state) => {
+    if (state == appState.GAMING) {
+      gameLoop += 1;
+    }
     setState(state);
   };
 
   const saveStar = (url) => {
     setStarData(url);
+  };
+
+  const playSound = (sound) => {
+    if (sound == "caughtSound") {
+      playCaughtSound();
+    }
   };
 
   const renderApp = () => {
@@ -33,6 +47,8 @@ function App() {
             toNextState={changeAppState}
             newStarData={starData}
             clearNewStar={saveStar}
+            playSound={playSound}
+            gameLoop={gameLoop}
           />
         );
       case appState.GENERATING:
@@ -45,7 +61,6 @@ function App() {
         break;
     }
   };
-
   return (
     <div className="App">
       <header className="App-header">

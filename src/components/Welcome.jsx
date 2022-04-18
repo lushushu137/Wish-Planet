@@ -77,25 +77,23 @@ function Welcome(props) {
             {
                 videoLoaded ?
             <Button 
-                sx={{
-                    marginTop: 5
-                }}
                     onClick={handleClick}
                     variant="outlined"
                     disableElevation
                     size="large"
                 >Enter
             </Button> :
-             <Button 
-             sx={{
-                 marginTop: 5
-             }}
-                 variant="outlined"
-                 disableElevation
-                 size="large"
-                 disabled
-             >Loading...
-            </Button> 
+            <p>LOADING...</p>
+            //  <Button 
+            //  sx={{
+            //      marginTop: 5
+            //  }}
+            //      variant="outlined"
+            //      disableElevation
+            //      size="large"
+            //      disabled
+            //  >Loading...
+            // </Button> 
             }
 
 

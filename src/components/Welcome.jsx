@@ -11,14 +11,11 @@ import Button from '@mui/material/Button';
 import {theme} from "../styles"
 
 function Welcome(props) {
-    const [play, data] = useSound(bgm);
+    const [play] = useSound(bgm, {loop:true});
     const [fadeIn, setFadeIn] = useState(true);
 
     const [videoLoaded, setVideoLoaded] = useState(false)
 
-    useEffect(()=>{
-        data.sound?.loop();
-    }, [data])
 
     // set video
     useEffect(() => {

@@ -36,7 +36,6 @@ function ShootingStar(props) {
     // caughtSound = p5.loadSound(caught)
     jingleSound.setLoop(true)
     shootSound.setLoop(false)
-    console.log(shootSound)
   }
 
   const setup = (p5, canvasParentRef) => {
@@ -131,7 +130,6 @@ console.log("envelope:", envelope)
     switch(props.currentState){
       case CATCH_STATUS.SHOW_LAST_STAR:
         if (props.newStar){
-          console.log("props.newStar:", props.newStar)
           p5.push();
           p5.translate(props.newStar.x*width, height * props.newStar.y);
           p5.rotate(p5.frameCount / -200.0);

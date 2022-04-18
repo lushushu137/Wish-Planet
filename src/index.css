@@ -14,7 +14,12 @@ code {
     monospace;
 }
 p, h2, h3 {
-  font-family: 'Roman';
+  /* font-family: 'Roman'; */
+  font-family: 'Anek Telugu', sans-serif;
+}
+
+h1{
+  font-family: 'Abril Fatface', cursive;
 }
 @font-face {
   font-family: 'Storybook';

@@ -149,7 +149,7 @@ console.log("envelope:", envelope)
 
          // draw shooting star
          star(position.x, position.y, 5, 25, 6,p5);
-         if (props.direction == 1){
+         if (props.direction == 1 || props.direction == 0){
            position.add(slowVelocity);
          }
          if (props.direction == -1){

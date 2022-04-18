@@ -16,7 +16,7 @@ function Background() {
       setShowCredit(false);
     });
     return ()=>{
-      creditRef.current.removeEventListener("listener")
+      creditRef.current.removeEventListener("click")
     }
   },[])
   function Point(x, y) {

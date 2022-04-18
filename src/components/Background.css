@@ -4,6 +4,9 @@
   overflow: hidden;
   display: flex;
   justify-content: center;
+  background-image: url(../asset/pic/background.png);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .bgForCredit{
   width: 100vw;

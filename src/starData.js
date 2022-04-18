@@ -1,7 +1,7 @@
-import myPlanet from "./asset/pic/myPlanet.jpg";
-import myPlanet_1 from "./asset/pic/myPlanet (1).jpg";
-import myPlanet_2 from "./asset/pic/myPlanet (2).jpg";
-import myPlanet_3 from "./asset/pic/myPlanet (3).jpg";
+import myPlanet from "./asset/pic/myPlanet (4).png";
+import myPlanet_1 from "./asset/pic/myPlanet (1).png";
+import myPlanet_2 from "./asset/pic/myPlanet (2).png";
+import myPlanet_3 from "./asset/pic/myPlanet (3).png";
 
 export const starName = [
   "No Where Land",

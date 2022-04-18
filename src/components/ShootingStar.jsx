@@ -45,8 +45,8 @@ function ShootingStar(props) {
     position = p5.createVector(width*0.8, 0);
     velocity = p5.createVector(-1,0.8)
     slowVelocity = p5.createVector(-1,0.8)
-    velocity.mult(1.5);
-    slowVelocity.mult(0.5)
+    velocity.mult(0.8);
+    slowVelocity.mult(0.4)
 
     for (let i = 0; i< starData.length; i++){
       starData[i]["freq"] = p5.random(500,1000)
@@ -105,7 +105,7 @@ console.log("envelope:", envelope)
         hit = true
         if (!hoverState || hoverState.id !== starData[i].id){
           hoverState = starData[i]
-          setShowCard({...hoverState, posX: starData[i].x * width-120, posY:starData[i].y * height + 50});
+          setShowCard({...hoverState, posX: starData[i].x * width-100, posY:starData[i].y * height + 20});
           let freqValue = p5.midiToFreq(scaleArray[starData[i].id % scaleArray.length]);
           osc.freq(freqValue);
           if (!osc.started){
@@ -147,10 +147,10 @@ console.log("envelope:", envelope)
 
          // draw shooting star
          star(position.x, position.y, 5, 25, 6,p5);
-         if (props.direction == 1 || props.direction == 0){
+         if (props.direction == 1 ){
            position.add(slowVelocity);
          }
-         if (props.direction == -1){
+         if (props.direction == -1 || props.direction == 0){
            position.add(velocity);
          }
  

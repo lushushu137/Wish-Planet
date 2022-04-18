@@ -1,32 +1,33 @@
 {
   "files": {
-    "main.css": "./static/css/main.b5813f7f.css",
-    "main.js": "./static/js/main.ae31fd1e.js",
+    "main.css": "./static/css/main.d2d1ddce.css",
+    "main.js": "./static/js/main.ad3c1a1e.js",
     "static/js/845.1a4c365d.chunk.js": "./static/js/845.1a4c365d.chunk.js",
     "static/js/787.b0d694be.chunk.js": "./static/js/787.b0d694be.chunk.js",
     "static/media/3_Looking_Up_To_The_Sky.mp3": "./static/media/3_Looking_Up_To_The_Sky.b4af2611e5b7f025f5f2.mp3",
     "static/media/caught.wav": "./static/media/caught.928a2cb6dfdb3226e4ce.wav",
     "static/media/generated.wav": "./static/media/generated.91d6a882b41333ed2c0b.wav",
+    "static/media/background.png": "./static/media/background.918814a0a8ca92370aaf.png",
+    "static/media/myPlanet (2).png": "./static/media/myPlanet (2).d0824104428ef26d5e37.png",
+    "static/media/myPlanet (3).png": "./static/media/myPlanet (3).181137f1eb109eaf8604.png",
     "static/media/drone.mp3": "./static/media/drone.c1bf73b671db74e8a8cb.mp3",
-    "static/media/myPlanet.jpg": "./static/media/myPlanet.6a3eb20d9ba82e4e5b61.jpg",
-    "static/media/myPlanet (3).jpg": "./static/media/myPlanet (3).f90002257a98631370b7.jpg",
-    "static/media/myPlanet (1).jpg": "./static/media/myPlanet (1).de9f761e793a8baba04b.jpg",
+    "static/media/myPlanet (1).png": "./static/media/myPlanet (1).f1df800cea3a60ca8582.png",
     "static/media/guidegif.gif": "./static/media/guidegif.326e65f99ff48549e51d.gif",
     "static/media/guide3.png": "./static/media/guide3.eb783027c0321bfe5ce4.png",
+    "static/media/myPlanet (4).png": "./static/media/myPlanet (4).c1ae5756a4df3a464fc1.png",
     "static/media/guide2.png": "./static/media/guide2.b2e3f9f892856307c4e8.png",
     "static/media/jingleBell.mp3": "./static/media/jingleBell.670cbbea26a1ef22ddb0.mp3",
     "static/media/Storybook.TTF": "./static/media/Storybook.20656ac6117b8b01a012.TTF",
     "static/media/AvenirLTStd-Roman.otf": "./static/media/AvenirLTStd-Roman.0bfb049d9455e81fd1da.otf",
     "static/media/guide.png": "./static/media/guide.e25e5d2585ea51c0dbc2.png",
-    "static/media/myPlanet (2).jpg": "./static/media/myPlanet (2).a3965fa64b9aedebc62c.jpg",
     "index.html": "./index.html",
-    "main.b5813f7f.css.map": "./static/css/main.b5813f7f.css.map",
-    "main.ae31fd1e.js.map": "./static/js/main.ae31fd1e.js.map",
+    "main.d2d1ddce.css.map": "./static/css/main.d2d1ddce.css.map",
+    "main.ad3c1a1e.js.map": "./static/js/main.ad3c1a1e.js.map",
     "845.1a4c365d.chunk.js.map": "./static/js/845.1a4c365d.chunk.js.map",
     "787.b0d694be.chunk.js.map": "./static/js/787.b0d694be.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b5813f7f.css",
-    "static/js/main.ae31fd1e.js"
+    "static/css/main.d2d1ddce.css",
+    "static/js/main.ad3c1a1e.js"
   ]
 }

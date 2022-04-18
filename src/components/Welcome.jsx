@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import "./Welcome.css"
 import useSound from 'use-sound';
-import bgm from "../asset/music/bgm.mp3";
+import bgm from "../asset/music/3_Looking_Up_To_The_Sky.mp3";
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import {theme} from "../styles"

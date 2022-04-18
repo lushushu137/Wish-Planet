@@ -1,12 +1,24 @@
-import React from 'react';
+import CopyrightOutlinedIcon from '@mui/icons-material/CopyrightOutlined';
+import End from "./End"
 import Sketch from 'react-p5';
 import "./Background.css"
 import 'p5/lib/addons/p5.sound';
+import React , { useEffect, useRef, useState }from "react";
+import { Fade } from '@mui/material';
 
 
 function Background() {
+  const [showCredit, setShowCredit] = useState(false);
+  const creditRef = useRef(null);
 
-
+  useEffect(()=>{
+    let listener = creditRef.current?.addEventListener("click", ()=>{
+      setShowCredit(false);
+    });
+    return ()=>{
+      creditRef.current.removeEventListener("listener")
+    }
+  },[])
   function Point(x, y) {
     this.x = x;
     this.y = y;
@@ -188,7 +200,27 @@ function Background() {
   const draw = (p5) => {
 
   };
+  const handleClickIcon=()=>{
+    setShowCredit(!showCredit);
+  }
   return  <div className="Background">
+    <CopyrightOutlinedIcon
+    sx={{
+      position: "absolute",
+      right: 10,
+      top:10,
+      zIndex: 99
+    }}
+    onClick={handleClickIcon}
+    />
+    <div>
+      <Fade in={showCredit} timeout={500}>
+        <div ref={creditRef}className='bgForCredit'>
+        <End/>
+        </div>
+      </Fade>
+    </div>
+  
     <Sketch setup={setup} draw={draw} />
   </div>
 }

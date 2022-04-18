@@ -6,6 +6,8 @@ import Welcome from "./components/Welcome";
 import Tutorial from "./components/Tutorial";
 import GeneratePlanet from "./components/GeneratePlanet";
 import Game from "./components/Game";
+import End from "./components/End";
+import ShootingStar from "./components/ShootingStar";
 import { appState, CATCH_STATUS } from "./utilities";
 import { Fade } from "@mui/material";
 import caught from "./asset/music/caught.wav";
@@ -76,8 +78,17 @@ function App() {
         return (
           <GeneratePlanet toNextState={changeAppState} saveStar={saveStar} />
         );
-      // case appState.CHECKPlANET:
-      //   return <PlanetCard />;
+      case appState.END:
+        return (
+          <>
+            <End />
+            <ShootingStar
+              direction={0}
+              currentState={CATCH_STATUS.WAITING}
+              newStar={starData}
+            />
+          </>
+        );
       default:
         break;
     }

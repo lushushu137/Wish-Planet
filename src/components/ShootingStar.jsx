@@ -5,7 +5,7 @@ import {starData} from "../starData";
 import PlanetCard from "./PlanetCard"
 import "./ShootingStar.css"
 import jingleBell from "../asset/music/jingleBell.mp3"
-import drone from "../asset/music/drone.wav"
+import drone from "../asset/music/drone.mp3"
 import 'p5/lib/addons/p5.sound';
 
 let osc, envelope, oscPlaying;

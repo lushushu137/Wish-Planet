@@ -12,27 +12,45 @@ export const starName = [
 export const starPos = [
   {
     x: 0.3,
-    y: 0.1,
+    y: 0.15,
     radius1: 4,
     radius2: 20,
   },
   {
     x: 0.3,
-    y: 0.2,
+    y: 0.25,
     radius1: 3,
     radius2: 15,
   },
   {
-    x: 0.3,
+    x: 0.35,
     y: 0.3,
     radius1: 2,
     radius2: 10,
+  },
+  {
+    x: 0.5,
+    y: 0.3,
+    radius1: 2,
+    radius2: 10,
+  },
+  {
+    x: 0.6,
+    y: 0.25,
+    radius1: 3,
+    radius2: 15,
   },
   {
     x: 0.8,
     y: 0.2,
     radius1: 2,
     radius2: 10,
+  },
+  {
+    x: 0.8,
+    y: 0.1,
+    radius1: 2.5,
+    radius2: 7.5,
   },
 ];
 
@@ -84,14 +102,24 @@ export const starData = [
 ];
 
 export const newStar = (time, name, from, url) => {
+  let pos = starPos[Math.floor(Math.random() * (starPos.length - 1))];
+  for (let i = 0; i < starPos.length; i++) {
+    if (starPos[i].x == pos.x) {
+      starPos.splice(i, 1);
+    }
+  }
   let newStarData = {
-    id: starData.length - 1,
-    ...starPos[Math.floor(Math.random() * (starPos.length - 1))],
+    id: starData.length,
+    ...pos,
     from,
     time,
     name,
     url,
   };
   starData.push(newStarData);
-  return newStarData;
+  if (starPos.length == 0) {
+    return { ...newStarData, end: true };
+  } else {
+    return newStarData;
+  }
 };

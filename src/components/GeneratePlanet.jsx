@@ -1,3 +1,4 @@
+import DownloadIcon from '@mui/icons-material/Download';
 import {theme} from "../styles"
 import { ThemeProvider } from '@mui/material/styles';
 import GenerateInP5 from './GenerateInP5';
@@ -21,11 +22,17 @@ function GeneratePlanet(props) {
     const [name, setName] = useState("");
     const [fadeIn, setFadeIn] = useState(true);
     const [imgFadeIn, setImgFadeIn] = useState(false);
-    const from = starName[Math.floor(Math.random() * (starName.length - 1))];
+    const [from, setFrom] = useState("");
     const handleState = (comingstate, p5, cnv) =>{
         setState(comingstate);
         setP5Context({p5, cnv})
     }
+
+    useEffect(()=>{
+        setFrom(starName[Math.floor(Math.random() * (starName.length - 1))])
+    },[])
+
+
     const  CurentTime = () =>
     { 
         var now = new Date();
@@ -137,7 +144,13 @@ function GeneratePlanet(props) {
                                 </InputAdornment>
                         }
                     />
-                    <button onClick={handleDownload}/>
+                    <IconButton onClick={handleDownload} color="primary">
+                        <DownloadIcon
+                            aria-label="toggle password visibility"
+                            edge="end"
+                        >
+                        </DownloadIcon>
+                    </IconButton>
                 </ThemeProvider>
             </> 
             default:
@@ -162,8 +175,13 @@ function GeneratePlanet(props) {
         setFadeIn(false);
         await sleep(3000)
         setImgFadeIn(false);
-        await sleep(1000)
-        props.toNextState(appState.GAMING)
+        await sleep(1000);
+        if (newStarData.end){
+            props.toNextState(appState.END)
+
+        } else {
+            props.toNextState(appState.GAMING)
+        }
     }
     const handleChange = (event) => {
         setName(event.target.value)

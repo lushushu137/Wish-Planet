@@ -9,7 +9,7 @@ import { IconButton } from '@mui/material';
 import {theme} from "../styles"
 import { ThemeProvider } from '@mui/material/styles';
 
-let seed = 2000;
+let seed = Math.random() * 2000;
 
 let mic;
 let fft;
@@ -34,6 +34,21 @@ let m = 200;
 let n = 200;
 
 let generatedSound;
+
+
+
+
+let slevel;
+let volume;
+let maxvolume = 0;
+let currentr = 0;
+let col3;
+let col4;
+let col5;
+let linecolor;
+let colors1 = [" #BB9999"," #7F6969","#B2AE97","#AFB8A3","#9AB6AE","#7F9597"," #848E9C","#7F7999","#9A85A1","#947583","#866B6B"," #4C5777","#4E4263","#313C4C"];
+let colors2 = ["#FEE1E1","rgb(252,250,225)","rgb(190,233,252)","rgb(255,213,216)","rgb(216,239,246)"
+];
 function GenerateInP5(props) {
   const btnRef = useRef(null);
   const [state, setState] = useState(generatingState.BEFORE)
@@ -84,14 +99,51 @@ function GenerateInP5(props) {
 
   const draw = (p5) => {
 
-   // background(200);
-   p5.fill(0,10,70,100);
-   p5.circle(200, 200, circleSize);
+     ////////////////// get MAX volume ////
+  slevel = mic.getLevel();
+  volume = p5.round(slevel * 2000); //(5,200)
+  if (maxvolume < volume) {
+    maxvolume = volume;
+  }else{}
+  if (currentr < maxvolume) {
+    currentr += 7;
+  } else {
+    currentr = maxvolume;
+  }
+  ///////////////////////////////////////
   
+  //////////
+  //star
+  p5.randomSeed(seed);
+  p5.noStroke();
+  p5.push();
+  p5.translate(p5.width / 2, p5.height / 2);
 
+  // audio gradient
+  col4 = p5.color(p5.random(colors1));
+  col4.setRed(currentr);
+  // col4.setGreen(currentr);
+  // col4.setBlue(currentr);
+  col3 = p5.color(p5.random(colors1));
+  col5 = p5.random(colors2);
+
+  let circleR = p5.width / 2;
+  var grad = p5.drawingContext.createLinearGradient(
+    0,
+    0,
+    -circleR / 2,
+    -circleR / 2
+  );
+  grad.addColorStop(0, col3);
+  grad.addColorStop(1, col4);
+
+  p5.drawingContext.fillStyle = grad;
+  p5.circle(0, 0, circleR);
+  p5.pop();
+  linecolor = col5;
+  ///////////////////////////////////////////////////////
   //Sound visual
   let wave = fft.waveform(); //每一帧得到一串数组1024个
-
   if (pct[0] == undefined) {
     //Sets all the initial points value to 0
     for (let i = 0; i < wave.length; i++) {
@@ -99,7 +151,6 @@ function GenerateInP5(props) {
       wavePos[i] = [0, 0];
     }
   }
-
   //Moves all of the points according to the soundwave
   let pointNum = 10; //几边形
   for (let i = 0; i < pointNum; i++) {
@@ -118,8 +169,8 @@ function GenerateInP5(props) {
       pct[index] = 0;
     }
 
-    let amplitude = 100;
-    let h = p5.constrain(animPoint * amplitude, 0, 150);
+    let amplitude = 400;
+    let h = p5.constrain(animPoint * amplitude, 0, 90);
     let a = p5.cos(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * h;
     let o = p5.sin(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * h;
 
@@ -128,7 +179,7 @@ function GenerateInP5(props) {
       a +
       p5.cos(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * (circleSize / 2);
     curveYPoints[i] =
-    p5.height / 2 +
+      p5.height / 2 +
       o +
       p5.sin(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * (circleSize / 2);
   }
@@ -137,7 +188,6 @@ function GenerateInP5(props) {
   for (let i = 0; i < pointNum; i++) {
     for (let j = 0; j < 1 - pointNum / 100; j += pointNum / 100) {
       //noStroke();
-
       let x = p5.curvePoint(
         curveXPoints[i % pointNum],
         curveXPoints[(i + 1) % pointNum],
@@ -152,16 +202,96 @@ function GenerateInP5(props) {
         curveYPoints[(i + 3) % pointNum],
         j
       );
-
-      p5.fill(outColor);
-      //noStroke();
-      p5.stroke(200,230,255,30);
-      p5.line(m,n,x,y);
-      p5.circle(x, y, 1);
+      /////draw dot and line
+      p5.fill(linecolor);
+      p5.stroke(200, 230, 255, 35);
+      p5.line(m, n, x, y);
+      p5.circle(x, y, 1.3);
       m = x;
       n = y;
     }
   }
+
+
+
+  //  // background(200);
+  //  p5.fill(0,10,70,100);
+  //  p5.circle(200, 200, circleSize);
+  
+
+  // //Sound visual
+  // let wave = fft.waveform(); //每一帧得到一串数组1024个
+
+  // if (pct[0] == undefined) {
+  //   //Sets all the initial points value to 0
+  //   for (let i = 0; i < wave.length; i++) {
+  //     pct[i] = 0;
+  //     wavePos[i] = [0, 0];
+  //   }
+  // }
+
+  // //Moves all of the points according to the soundwave
+  // let pointNum = 10; //几边形
+  // for (let i = 0; i < pointNum; i++) {
+  //   let index = p5.floor(p5.map(i, 0, pointNum, 0, wave.length)); //floor取整
+
+  //   if (pct[index] == 0) {
+  //     wavePos[index][0] = wavePos[index][1];
+  //     wavePos[index][1] = wave[index];
+  //   }
+
+  //   animPoint = p5.lerp(wavePos[index][0], wavePos[index][1], pct[index]);
+  //   //lerp取两个点之间的值
+  //   pct[index] += 0.3;
+
+  //   if (pct[index] >= 1) {
+  //     pct[index] = 0;
+  //   }
+
+  //   let amplitude = 100;
+  //   let h = p5.constrain(animPoint * amplitude, 0, 150);
+  //   let a = p5.cos(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * h;
+  //   let o = p5.sin(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * h;
+
+  //   curveXPoints[i] =
+  //   p5.width / 2 +
+  //     a +
+  //     p5.cos(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * (circleSize / 2);
+  //   curveYPoints[i] =
+  //   p5.height / 2 +
+  //     o +
+  //     p5.sin(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * (circleSize / 2);
+  // }
+
+  // //Creates dots that follow the path of the sound wave
+  // for (let i = 0; i < pointNum; i++) {
+  //   for (let j = 0; j < 1 - pointNum / 100; j += pointNum / 100) {
+  //     //noStroke();
+
+  //     let x = p5.curvePoint(
+  //       curveXPoints[i % pointNum],
+  //       curveXPoints[(i + 1) % pointNum],
+  //       curveXPoints[(i + 2) % pointNum],
+  //       curveXPoints[(i + 3) % pointNum],
+  //       j
+  //     );
+  //     let y = p5.curvePoint(
+  //       curveYPoints[i % pointNum],
+  //       curveYPoints[(i + 1) % pointNum],
+  //       curveYPoints[(i + 2) % pointNum],
+  //       curveYPoints[(i + 3) % pointNum],
+  //       j
+  //     );
+
+  //     p5.fill(outColor);
+  //     //noStroke();
+  //     p5.stroke(200,230,255,30);
+  //     p5.line(m,n,x,y);
+  //     p5.circle(x, y, 1);
+  //     m = x;
+  //     n = y;
+  //   }
+  // }
   };
 
 

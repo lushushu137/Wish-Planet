@@ -7,10 +7,14 @@ function PlanetCard(props) {
     
     return ( <div className='PlanetCard'>
         <div className="card-container" style={{"top": posY,"left": posX}}>
-            <img src={url} alt="planet pic" style={{"width": 200, "height":200}}/>
-            <p>From {from}</p>
-            <p>{name}'s Planet</p>
-            <p>{`(${time})`}</p>
+            <div className="card-container-pic">
+                <img src={url} alt="planet pic"/>
+                <h4>{name}'s Planet</h4>
+            </div>
+            <div className='card-container-text'>
+                <p>FROM {from.toUpperCase()}</p>
+                <p>{`(${time})`}</p>
+            </div>
         </div>
     </div> );
 }

@@ -9,11 +9,11 @@
     flex-direction: column;
     font-family: "Storybook";
 }
-h1 {
+.Welcome h1 {
     font-weight: normal;
     margin-bottom: 0;
 }
-p{
+.Welcome p{
     font-size: 16px;
     word-spacing: 5;
     margin-top: 5px;

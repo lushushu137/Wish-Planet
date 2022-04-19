@@ -31,8 +31,11 @@ function End(props) {
         <p>Magic 3.Glitter+Arrival.wav by gsb1039 | License: Creative Commons 0</p>
         <p>Story Logo by DDmyzik | License: Attribution Noncommercial 3.0</p>
         <p>Amies - Discoveries: Looking Up To The Sky - Provided by Lofi Girl</p>
-        <h3>OPEN SOURCE ATTRIBUTION</h3>
-        <p><a href="https://editor.p5js.org/lukwest/sketches/ZkfwK2Voa" target="_blank">lukwest</a></p>
+        <h3>INSPIRATION</h3>
+        <p>
+            <a href="https://editor.p5js.org/lukwest/sketches/ZkfwK2Voa" target="_blank">lukwest</a>&nbsp; 
+            <a href="https://openprocessing.org/sketch/1370757" target="_blank">SamuelYAN</a>&nbsp; 
+            <a href="https://openprocessing.org/sketch/1245454" target="_blank">Samuel Favreau</a></p>
     </div> 
     </Fade> 
     

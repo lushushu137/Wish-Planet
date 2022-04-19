@@ -337,7 +337,7 @@ function GenerateInP5(props) {
       pct[index] = 0;
     }
 
-    let amplitude = 400;
+    let amplitude = 200;
     let h = p5.constrain(animPoint * amplitude, 0, 90);
     let a = p5.cos(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * h;
     let o = p5.sin(p5.radians(p5.map(i, 0, pointNum, 0, 360))) * h;

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.d2d1ddce.css",
-    "main.js": "./static/js/main.ad3c1a1e.js",
+    "main.js": "./static/js/main.f2b34982.js",
     "static/js/845.1a4c365d.chunk.js": "./static/js/845.1a4c365d.chunk.js",
     "static/js/787.b0d694be.chunk.js": "./static/js/787.b0d694be.chunk.js",
     "static/media/3_Looking_Up_To_The_Sky.mp3": "./static/media/3_Looking_Up_To_The_Sky.b4af2611e5b7f025f5f2.mp3",
@@ -22,12 +22,12 @@
     "static/media/guide.png": "./static/media/guide.e25e5d2585ea51c0dbc2.png",
     "index.html": "./index.html",
     "main.d2d1ddce.css.map": "./static/css/main.d2d1ddce.css.map",
-    "main.ad3c1a1e.js.map": "./static/js/main.ad3c1a1e.js.map",
+    "main.f2b34982.js.map": "./static/js/main.f2b34982.js.map",
     "845.1a4c365d.chunk.js.map": "./static/js/845.1a4c365d.chunk.js.map",
     "787.b0d694be.chunk.js.map": "./static/js/787.b0d694be.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d2d1ddce.css",
-    "static/js/main.ad3c1a1e.js"
+    "static/js/main.f2b34982.js"
   ]
 }
